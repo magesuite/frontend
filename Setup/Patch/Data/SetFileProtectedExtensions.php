@@ -35,7 +35,10 @@ class SetFileProtectedExtensions implements \Magento\Framework\Setup\Patch\DataP
 
     protected function getFileProtectedExtensions()
     {
-        $fileProtectedExtensions = $this->scopeConfig->getValue(\Magento\MediaStorage\Model\File\Validator\NotProtectedExtension::XML_PATH_PROTECTED_FILE_EXTENSIONS);
+        $fileProtectedExtensions = explode(
+            ',',
+            $this->scopeConfig->getValue(\Magento\MediaStorage\Model\File\Validator\NotProtectedExtension::XML_PATH_PROTECTED_FILE_EXTENSIONS)
+        );
 
         $svgPosition = array_search('svg', $fileProtectedExtensions);
 
