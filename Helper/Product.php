@@ -49,6 +49,11 @@ class Product extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $newsFromDate = $product->getNewsFromDate();
         $newsToDate = $product->getNewsToDate();
+
+        if($newsFromDate === null && $newsToDate === null) {
+            return false;
+        }
+
         $date = $date ?: date('Y-m-d');
 
         $fromTimestamp = strtotime($newsFromDate);
