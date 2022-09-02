@@ -39,7 +39,7 @@ class FullPathBreadcrumbs implements \Magento\Framework\Event\ObserverInterface
 
         $category = $this->breadcrumbCategoryFinder->getCategory($product);
 
-        if ($category == null) {
+        if ($category === null || $category->getId() === null) {
             return;
         }
 
