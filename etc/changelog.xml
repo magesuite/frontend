@@ -22,6 +22,12 @@
                     <overview>[IPET-1384] Fix category helper</overview>
                 </entry>
             </tag>
+            <tag version="3.2.9" date="2022-09-14">
+                <entry>
+                    <type>FEATURE</type>
+                    <overview>[RK-177] Add possibility to add CS logo to button</overview>
+                </entry>
+            </tag>
         </changelog>
     </module>
 </config>
