@@ -15,7 +15,8 @@ label.cs-csfeature__logo span:first-child {                                     
 .admin__collapsible-block-wrapper.cs-csfeature__logo .admin__collapsible-title > span:first-child:after,    /* Collapsible block title */
 .admin__field.cs-csfeature__logo > .admin__field-label > label > span:first-child:after,                    /* Category fields */
 label.cs-csfeature__logo span:first-child:after,                                                            /* Store view config */
-.section-config.cs-csfeature__logo > .admin__collapsible-block > a:after {                                  /* Section config title */
+.section-config.cs-csfeature__logo > .admin__collapsible-block > a:after,                                   /* Section config title */
+button.cs-csfeature__logo span:first-child:after {                                                          /* Button */                        
     position: absolute;
     top: 50%;
     left: 0;
@@ -31,4 +32,10 @@ label.cs-csfeature__logo span:first-child:after,                                
 .section-config.cs-csfeature__logo > .admin__collapsible-block > a:after {                                  /* Section config title */
     left: unset;
     margin-left: 10px;
+}
+
+/* Button - position to the left */
+button.cs-csfeature__logo span:first-child {
+    position: relative;
+    padding-left: 2.5rem;
 }
