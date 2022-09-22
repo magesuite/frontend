@@ -36,6 +36,10 @@ class ReplaceCategoryUrlWithCustomCategoryUrl
      */
     public function afterGetItems(\Magento\Sitemap\Model\ItemProvider\Category $category, $result, int $storeId)
     {
+        if (empty($result)) {
+            return $result;
+        }
+
         $categoriesIds = array_keys($result);
         $categoriesCustomUrlAttributes = $this->categoryCollection->getCategoriesCustomUrlAttributes($categoriesIds, $storeId);
 
