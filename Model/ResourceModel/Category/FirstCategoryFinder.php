@@ -6,21 +6,21 @@ class FirstCategoryFinder
 {
     protected \Magento\Framework\DB\Adapter\AdapterInterface $connection;
 
-    public function __construct(\Magento\Framework\App\ResourceConnection $resourceConnection) {
+    public function __construct(\Magento\Framework\App\ResourceConnection $resourceConnection)
+    {
         $this->connection = $resourceConnection->getConnection();
     }
 
-    protected function getFirstCategoryForStore($categoryIds, $rootCategoryId)
+    public function getFirstCategoryIdForStore($categoryIds, $rootCategoryId)
     {
-        $query = $this->connection->select();
+        $select = $this->connection->select();
 
-        $query->from($this->connection->getTableName('catalog_category_entity'), 'entity_id');
-        $query->where('entity_id IN(?)', $categoryIds);
-        $query->where('path LIKE ?', '%/'.$rootCategoryId.'/%');
-        $query->order('entity_id ASC');
+        $select->from($this->connection->getTableName('catalog_category_entity'), 'entity_id');
+        $select->where('entity_id IN(?)', $categoryIds);
+        $select->where('path LIKE ?', "%/$rootCategoryId/%");
+        $select->order('entity_id ASC');
+        $select->limit(1);
 
-        $ids = $this->connection->fetchCol($query);
-
-        echo '';
+        return $this->connection->fetchOne($select);
     }
 }
