@@ -38,7 +38,7 @@ class FirstCategoryFinder implements BreadcrumbCategoryFinderInterface
         $rootCategoryId = $this->storeManager->getStore($storeId)->getRootCategoryId();
         $firstCategoryId = $this->firstCategoryFinder->getFirstCategoryIdForStore($categoryIds, $rootCategoryId);
 
-        if ($firstCategoryId === null) {
+        if (!is_numeric($firstCategoryId)) {
             return null;
         }
 
