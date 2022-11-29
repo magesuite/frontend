@@ -4,29 +4,23 @@ namespace MageSuite\Frontend\Service\Breadcrumb;
 
 class FirstCategoryFinder implements BreadcrumbCategoryFinderInterface
 {
-    /**
-     * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory
-     */
-    private $categoryCollectionFactory;
-
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    private $storeManager;
+    protected \MageSuite\Frontend\Model\ResourceModel\Category\FirstCategoryFinder $firstCategoryFinder;
+    protected \Magento\Store\Model\StoreManagerInterface $storeManager;
+    protected \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository;
 
     public function __construct(
-        \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \MageSuite\Frontend\Model\ResourceModel\Category\FirstCategoryFinder $firstCategoryFinder,
+        \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository
     )
     {
-        $this->categoryCollectionFactory = $categoryCollectionFactory;
         $this->storeManager = $storeManager;
+        $this->firstCategoryFinder = $firstCategoryFinder;
+        $this->categoryRepository = $categoryRepository;
     }
 
     /**
      * Finds first category in product in correct store
-     * @param \Magento\Catalog\Api\Data\ProductInterface $product
-     * @return \Magento\Catalog\Model\Category
      */
     public function getCategory(\Magento\Catalog\Api\Data\ProductInterface $product)
     {
@@ -42,14 +36,12 @@ class FirstCategoryFinder implements BreadcrumbCategoryFinderInterface
     private function getFirstCategoryForStore($categoryIds, $storeId)
     {
         $rootCategoryId = $this->storeManager->getStore($storeId)->getRootCategoryId();
+        $firstCategoryId = $this->firstCategoryFinder->getFirstCategoryIdForStore($categoryIds, $rootCategoryId);
 
-        $collection = $this->categoryCollectionFactory->create();
-        $collection
-            ->addAttributeToSelect('*')
-            ->addFieldToFilter('entity_id', $categoryIds)
-            ->addFieldToFilter('path', ['like' => '%/' . $rootCategoryId . '/%'])
-            ->addAttributeToSort('entity_id', 'ASC');
+        if (!is_numeric($firstCategoryId)) {
+            return null;
+        }
 
-        return $collection->getFirstItem();
+        return $this->categoryRepository->get($firstCategoryId, $storeId);
     }
 }
