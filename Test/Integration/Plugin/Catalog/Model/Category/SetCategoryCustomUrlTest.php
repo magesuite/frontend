@@ -32,10 +32,10 @@ class SetCategoryCustomUrlTest extends \PHPUnit\Framework\TestCase
     public function testCategoryCustomUrl()
     {
         $expectedResults = [
-            '338' => 'http://localhost/index.php/contact',
+            '338' => 'http://localhost/index.php/contact/',
             '339' => 'http://localhost/index.php/site1-default',
             '340' => 'http://localhost/index.php/in-stock-product-with-qty.html',
-            '341' => 'http://localhost/index.php/contact',
+            '341' => 'http://localhost/index.php/contact/',
             '342' => 'http://localhost/index.php/category-with-custom-url/category-with-broken-directive.html'
         ];
 
