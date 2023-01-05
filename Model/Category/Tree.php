@@ -7,48 +7,34 @@ class Tree
     const CACHE_LIFETIME = 86400;
     const CACHE_TAG = 'category_tree_%s_%s_%s';
 
-    /**
-     * @var int
-     */
-    protected $rootCategoryId;
+    protected int $rootCategoryId;
 
-    /**
-     * @var \Magento\Framework\App\CacheInterface
-     */
-    protected $cache;
+    protected \Magento\Framework\App\CacheInterface $cache;
 
-    /**
-     * @var \Magento\Framework\Serialize\Serializer\Json
-     */
-    protected $serializer;
+    protected \Magento\Framework\Serialize\Serializer\Serialize $serializer;
 
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface $storeManager
-     */
-    protected $storeManager;
+    protected \Magento\Store\Model\StoreManagerInterface $storeManager;
 
-    /**
-     * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory
-     */
-    protected $categoryCollectionFactory;
+    protected \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory;
 
-    /**
-     * @var \MageSuite\ContentConstructorFrontend\Helper\Category
-     */
-    protected $categoryHelper;
+    protected \MageSuite\ContentConstructorFrontend\Helper\Category $categoryHelper;
+
+    protected bool $includeNumberOfProductForVirtualCategory;
 
     public function __construct(
         \Magento\Framework\App\CacheInterface $cache,
         \Magento\Framework\Serialize\Serializer\Serialize $serializer,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
-        \MageSuite\ContentConstructorFrontend\Helper\Category $categoryHelper
+        \MageSuite\ContentConstructorFrontend\Helper\Category $categoryHelper,
+        bool $includeNumberOfProductForVirtualCategory = true
     ) {
         $this->cache = $cache;
         $this->serializer = $serializer;
         $this->storeManager = $storeManager;
         $this->categoryCollectionFactory = $categoryCollectionFactory;
         $this->categoryHelper = $categoryHelper;
+        $this->includeNumberOfProductForVirtualCategory = $includeNumberOfProductForVirtualCategory;
     }
 
     protected function buildTree($collection, $currentCategories)
@@ -59,7 +45,7 @@ class Tree
         foreach ($collection as $category) {
             $additionalData = [
                 'url' => $category->getUrl(),
-                'products_count' => $this->categoryHelper->getNumberOfProducts($category),
+                'products_count' => $this->categoryHelper->getNumberOfProducts($category, $this->includeNumberOfProductForVirtualCategory),
                 'current' => false,
                 'parents' => [],
                 'children' => []
@@ -139,7 +125,12 @@ class Tree
             $categoryCollection = $this->getCategoriesFromCollection($configuration);
             $categoryTree = $this->buildTree($categoryCollection, $currentCategories);
 
-            $this->cache->save($this->serializer->serialize($categoryTree), $cacheTag, [\Magento\Catalog\Model\Category::CACHE_TAG, 'categories_tree'], self::CACHE_LIFETIME);
+            $this->cache->save(
+                $this->serializer->serialize($categoryTree),
+                $cacheTag,
+                [\Magento\Catalog\Model\Category::CACHE_TAG, 'categories_tree'],
+                self::CACHE_LIFETIME
+            );
         }
 
         if ($categoryId) {

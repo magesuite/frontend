@@ -1,74 +1,57 @@
 <?xml version="1.0"?>
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
 
-    <preference for="\MageSuite\Frontend\Service\Breadcrumb\BreadcrumbCategoryFinderInterface"
-                type="\MageSuite\Frontend\Service\Breadcrumb\FirstCategoryFinder"/>
+    <preference for="MageSuite\Frontend\Service\Breadcrumb\BreadcrumbCategoryFinderInterface" type="MageSuite\Frontend\Service\Breadcrumb\FirstCategoryFinder"/>
 
-    <preference for="\Magento\Catalog\Model\Product\Image"
-                type="\MageSuite\Frontend\Model\Product\Image"/>
+    <preference for="Magento\Catalog\Model\Product\Image" type="MageSuite\Frontend\Model\Product\Image"/>
 
-    <preference for="\Magento\ConfigurableProduct\Model\Product\Type\Configurable"
-                type="\MageSuite\Frontend\Model\Product\Type\Configurable"/>
+    <preference for="Magento\ConfigurableProduct\Model\Product\Type\Configurable" type="MageSuite\Frontend\Model\Product\Type\Configurable"/>
 
-    <preference for="\MageSuite\Frontend\Service\AssetLocator"
-                type="\MageSuite\Frontend\Service\MagentoAssetLocator"/>
+    <preference for="MageSuite\Frontend\Service\AssetLocator" type="MageSuite\Frontend\Service\MagentoAssetLocator"/>
 
+    <preference for="Magento\Catalog\Controller\Adminhtml\Category\Save" type="MageSuite\Frontend\Controller\Adminhtml\Category\Save"/>
 
-    <preference for="\Magento\Catalog\Controller\Adminhtml\Category\Save"
-                type="\MageSuite\Frontend\Controller\Adminhtml\Category\Save"/>
+    <preference for="Magento\Catalog\Pricing\Price\MinimalPriceCalculatorInterface" type="MageSuite\Frontend\Pricing\Price\MinimalFinalPriceCalculator" />
 
-    <preference for="\Magento\Catalog\Pricing\Price\MinimalPriceCalculatorInterface"
-                type="\MageSuite\Frontend\Pricing\Price\MinimalFinalPriceCalculator" />
+    <preference for="Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator" type="MageSuite\Frontend\Model\CategoryUrlRewriteGenerator"/>
 
-    <preference for="\Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator"
-                type="\MageSuite\Frontend\Model\CategoryUrlRewriteGenerator"/>
+    <preference for="Magento\Sitemap\Model\Sitemap" type="MageSuite\Frontend\Model\Sitemap\Sitemap" />
 
     <type name="Magento\Catalog\Model\Category\Attribute\Backend\Image">
-        <plugin name="resize_category_image_teaser" type="\MageSuite\Frontend\Plugin\ResizeCategoryImageTeaser"
-                sortOrder="10"/>
+        <plugin name="resize_category_image_teaser" type="MageSuite\Frontend\Plugin\ResizeCategoryImageTeaser" sortOrder="10"/>
     </type>
 
-    <type name="\Magento\Cms\Model\Wysiwyg\Images\Storage">
-        <plugin name="optimize_wysiwyg_image" type="\MageSuite\Frontend\Plugin\OptimizeWysiwygImage"
-                sortOrder="10"/>
-        <plugin name="resize_wysiwyg_image" type="\MageSuite\Frontend\Plugin\ResizeWysiwygImage"
-                sortOrder="20"/>
+    <type name="Magento\Cms\Model\Wysiwyg\Images\Storage">
+        <plugin name="optimize_wysiwyg_image" type="MageSuite\Frontend\Plugin\OptimizeWysiwygImage" sortOrder="10"/>
+        <plugin name="resize_wysiwyg_image" type="MageSuite\Frontend\Plugin\ResizeWysiwygImage" sortOrder="20"/>
     </type>
 
-    <type name="\Magento\Framework\View\Design\Theme\Customization\Path">
-        <plugin name="disable_reading_customization_from_media_directory"
-                type="\MageSuite\Frontend\Plugin\DisableCustomViewConfigPath" sortOrder="1"/>
+    <type name="Magento\Framework\View\Design\Theme\Customization\Path">
+        <plugin name="disable_reading_customization_from_media_directory" type="MageSuite\Frontend\Plugin\DisableCustomViewConfigPath" sortOrder="1"/>
     </type>
 
-    <type name="\Magento\Framework\View\Asset\MergeService">
-        <plugin name="disable_clean_merged_js_css"
-                type="\MageSuite\Frontend\Plugin\DisableCleanMergedJsCss" sortOrder="1"/>
+    <type name="Magento\Framework\View\Asset\MergeService">
+        <plugin name="disable_clean_merged_js_css" type="MageSuite\Frontend\Plugin\DisableCleanMergedJsCss" sortOrder="1"/>
     </type>
 
-    <type name="\Magento\Catalog\Model\Category\DataProvider">
-        <plugin name="update_category_images_data"
-                type="\MageSuite\Frontend\Plugin\UpdateCategoryImagesData"
-                sortOrder="1"/>
+    <type name="Magento\Catalog\Model\Category\DataProvider">
+        <plugin name="update_category_images_data" type="MageSuite\Frontend\Plugin\UpdateCategoryImagesData" sortOrder="1"/>
     </type>
 
-    <type name="\Magento\Framework\View\Page\Config">
-        <plugin name="update_html_lang_attribute" type="\MageSuite\Frontend\Plugin\UpdateHtmlLangAttribute"
-                sortOrder="1"/>
+    <type name="Magento\Framework\View\Page\Config">
+        <plugin name="update_html_lang_attribute" type="MageSuite\Frontend\Plugin\UpdateHtmlLangAttribute" sortOrder="1"/>
     </type>
 
     <type name="Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable">
-        <plugin name="sort_attribute_options" type="\MageSuite\Frontend\Plugin\SortAttributeOptions"/>
+        <plugin name="sort_attribute_options" type="MageSuite\Frontend\Plugin\SortAttributeOptions"/>
     </type>
 
     <type name="Magento\Store\Block\Switcher">
-        <plugin name="switch_storeview_replace_url"
-                type="\MageSuite\Frontend\Plugin\SwitchStoreViewReplaceUrl"/>
+        <plugin name="switch_storeview_replace_url" type="MageSuite\Frontend\Plugin\SwitchStoreViewReplaceUrl"/>
     </type>
 
     <type name="Magento\GoogleAnalytics\Block\Ga">
-        <plugin name="add_google_optimize_container_id"
-                type="MageSuite\Frontend\Plugin\AddGoogleOptimizeContainerIdToJs"/>
+        <plugin name="add_google_optimize_container_id" type="MageSuite\Frontend\Plugin\AddGoogleOptimizeContainerIdToJs"/>
     </type>
 
     <type name="Magento\Catalog\Block\Product\ListProduct">
@@ -132,15 +115,12 @@
     </virtualType>
 
     <type name="Magento\Swatches\Helper\Data">
-        <plugin name="missing_zero_swatch_value_plugin"
-                type="MageSuite\Frontend\Plugin\Swatches\MissingZeroValueSwatch"/>
+        <plugin name="missing_zero_swatch_value_plugin" type="MageSuite\Frontend\Plugin\Swatches\MissingZeroValueSwatch"/>
     </type>
 
     <type name="\Magento\Cms\Controller\Adminhtml\Wysiwyg\Directive">
         <plugin name="directivePlugin" type="\MageSuite\Frontend\Plugin\PreserveTransparencyOnModal" sortOrder="1" />
     </type>
-
-
 
     <type name="Magento\Catalog\Block\Product\View">
         <plugin name="re_add_breadcrumbs_to_product_view" type="MageSuite\Frontend\Plugin\ReAddBreadcrumbsToProductView" />
@@ -178,8 +158,6 @@
     <type name="Magento\Sitemap\Model\ItemProvider\Category">
         <plugin name="replace_category_url_with_custom_category_url" type="MageSuite\Frontend\Plugin\Sitemap\Model\ItemProvider\Category\ReplaceCategoryUrlWithCustomCategoryUrl" sortOrder="2" />
     </type>
-
-    <preference for="Magento\Sitemap\Model\Sitemap" type="MageSuite\Frontend\Model\Sitemap\Sitemap" />
 
     <type name="Magento\Cms\Model\Block">
         <plugin name="add_id_to_cache_keys" type="MageSuite\Frontend\Plugin\Block\Model\Block\AddIdToCacheKeys" sortOrder="10" />
