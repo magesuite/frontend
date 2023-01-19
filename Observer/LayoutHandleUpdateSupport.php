@@ -17,6 +17,10 @@ class LayoutHandleUpdateSupport implements \Magento\Framework\Event\ObserverInte
         $layout = $observer->getEvent()->getLayout();
 
         foreach ($layout->getUpdate()->asArray() as $updateStr) {
+            if (empty($updateStr)) {
+                continue;
+            }
+
             if (preg_match('~<update(.*?)handle="([a-z_-]+?)"(.*?)/>~', $updateStr, $matches)) {
                 $layout->getUpdate()->addHandle($matches[2]);
             }
