@@ -20,6 +20,9 @@ class AddLayoutUpdateForSimplifiedBundle implements \Magento\Framework\Event\Obs
     const LAYOUT_HANDLE_NAME_CONFIGURE = 'checkout_cart_configure_type_simplified_bundle';
     const CHECKOUT_CART_CONFIGURE = 'checkout_cart_configure';
 
+    const LAYOUT_HANDLE_NAME_CONFIGURE_WISHLIST = 'wishlist_index_configure_type_simplified_bundle';
+    const WISHLIST_INDEX_CONFIGURE = 'wishlist_index_configure';
+
     public function __construct(
         \Magento\Framework\App\Request\Http $request,
         \Magento\Framework\Registry $registry
@@ -37,7 +40,7 @@ class AddLayoutUpdateForSimplifiedBundle implements \Magento\Framework\Event\Obs
     {
         $currentAction = $this->request->getFullActionName();
 
-        if($currentAction != self::CATALOG_PRODUCT_VIEW && $currentAction != self::CHECKOUT_CART_CONFIGURE ) {
+        if($currentAction != self::CATALOG_PRODUCT_VIEW && $currentAction != self::CHECKOUT_CART_CONFIGURE && $currentAction !=  self::WISHLIST_INDEX_CONFIGURE) {
             return;
         }
 
@@ -66,6 +69,8 @@ class AddLayoutUpdateForSimplifiedBundle implements \Magento\Framework\Event\Obs
             $layout->getUpdate()->addHandle(self::LAYOUT_HANDLE_NAME);
         } else if($currentAction == self::CHECKOUT_CART_CONFIGURE) {
             $layout->getUpdate()->addHandle(self::LAYOUT_HANDLE_NAME_CONFIGURE);
+        } else if($currentAction == self::WISHLIST_INDEX_CONFIGURE) {
+            $layout->getUpdate()->addHandle(self::LAYOUT_HANDLE_NAME_CONFIGURE_WISHLIST);
         }
     }
 }

@@ -34,6 +34,13 @@
                     <overview>[RK-120] Fix issue when sitemap has not category items</overview>
                 </entry>
             </tag>
+            <tag version="3.3.1" date="2022-09-30">
+                <entry>
+                    <type>FIX</type>
+                    <overview>Add missing wishlist_index_configure_type_simplified_bundle layout handle</overview>
+                    <ticket_id>MGS-4770</ticket_id>
+                </entry>
+            </tag>
         </changelog>
     </module>
 </config>
