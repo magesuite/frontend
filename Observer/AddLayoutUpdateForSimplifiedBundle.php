@@ -40,7 +40,11 @@ class AddLayoutUpdateForSimplifiedBundle implements \Magento\Framework\Event\Obs
     {
         $currentAction = $this->request->getFullActionName();
 
-        if($currentAction != self::CATALOG_PRODUCT_VIEW && $currentAction != self::CHECKOUT_CART_CONFIGURE && $currentAction !=  self::WISHLIST_INDEX_CONFIGURE) {
+        if(
+            $currentAction != self::CATALOG_PRODUCT_VIEW 
+            && $currentAction != self::CHECKOUT_CART_CONFIGURE 
+            && $currentAction !=  self::WISHLIST_INDEX_CONFIGURE
+        ) {
             return;
         }
 
