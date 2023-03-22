@@ -9,6 +9,13 @@ namespace MageSuite\Frontend\Plugin;
 
 class WysiwygImagesStoragePlugin
 {
+    protected const IMAGE_FILE_EXTENSIONS = [
+        'jpg',
+        'jpeg',
+        'png',
+        'gif'
+    ];
+
     /**
      * @var \Magento\Cms\Helper\Wysiwyg\Images
      */
@@ -93,9 +100,8 @@ class WysiwygImagesStoragePlugin
         $keepRation = true
     ) {
         $fileExtension = strtolower(pathinfo($source, PATHINFO_EXTENSION));
-        if ($fileExtension == 'svg') {
-            return false;
-        }
-        return $proceed($source, $keepRation);
+        return in_array($fileExtension, self::IMAGE_FILE_EXTENSIONS)
+            ? $proceed($source, $keepRation)
+            : false;
     }
 }
