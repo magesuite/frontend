@@ -35,7 +35,7 @@ class SortAttributeOptions
             'attribute_opt.sort_order ASC'
         );
 
-        $sortOrder = $connection->fetchPairs($select);
+        $sortOrder = array_flip(array_keys($connection->fetchPairs($select)));
 
         if(count($sortOrder)){
 
