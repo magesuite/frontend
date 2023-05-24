@@ -16,7 +16,7 @@ label.cs-csfeature__logo span:first-child {                                     
 .admin__field.cs-csfeature__logo > .admin__field-label > label > span:first-child:after,                    /* Category fields */
 label.cs-csfeature__logo span:first-child:after,                                                            /* Store view config */
 .section-config.cs-csfeature__logo > .admin__collapsible-block > a:after,                                   /* Section config title */
-button.cs-csfeature__logo span:first-child:after {                                                          /* Button */                        
+button.cs-csfeature__logo span:first-child:after {                                                          /* Button */
     position: absolute;
     top: 50%;
     left: 0;

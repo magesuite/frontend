@@ -57,7 +57,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $product = $this->productRepository->getById($productId);
 
         $this->registry->register('product', $product);
-        
+
         $reviewSummary = $this->productHelper->getReviewSummary($product, true);
 
         $this->assertArrayHasKey('data', $reviewSummary);
