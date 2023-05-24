@@ -1,37 +1,28 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageSuite\Frontend\Test\Unit\Service\Image;
 
 class ResizerTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var \Magento\TestFramework\ObjectManager
-     */
-    protected $objectManager;
+    protected ?\Magento\TestFramework\ObjectManager $objectManager = null;
+    protected ?\MageSuite\Media\Service\Thumbnail\Generator $generator = null;
 
-    /**
-     * @var \MageSuite\Frontend\Service\Image\Resizer
-     */
-    protected $resizer;
-
-    protected $targetWidthsDefault= [480, 768, 1024, 1440];
-    protected $targetWidthsCategory = [480, 960];
-
-    protected $thumbsDirectory = __DIR__ . '/../../assets/.thumbs';
+    protected ?array $targetWidthsDefault = [480, 768, 1024, 1440];
+    protected ?array $targetWidthsCategory = [480, 960];
+    protected ?string $thumbsDirectory = __DIR__ . '/../../assets/.thumbs';
 
     public function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\ObjectManager::getInstance();
-
-        $this->resizer = $this->objectManager->create(\MageSuite\Frontend\Service\Image\Resizer::class);
-
+        $this->generator = $this->objectManager->create(\MageSuite\Media\Service\Thumbnail\Generator::class);
         $this->cleanThumbsDirectory();
     }
 
     public function testItResizesImagesProperly()
     {
-
-        $this->resizer->createThumbs(realpath(__DIR__ . '/../../assets/test.jpg'));
+        $this->generator->generateThumbnails(realpath(__DIR__ . '/../../assets/test.jpg'));
 
         foreach ($this->targetWidthsDefault as $targetWidth) {
             list($resizedImageWidth) = getimagesize($this->thumbsDirectory . '/' . $targetWidth . '/test.jpg');
@@ -43,7 +34,7 @@ class ResizerTest extends \PHPUnit\Framework\TestCase
     public function testItResizesImagesForCategoryProperly()
     {
 
-        $this->resizer->createThumbs(realpath(__DIR__ . '/../../assets/test.jpg'), 'category');
+        $this->generator->generateThumbnails(realpath(__DIR__ . '/../../assets/test.jpg'), 'category');
 
         foreach ($this->targetWidthsCategory as $targetWidth) {
             list($resizedImageWidth) = getimagesize($this->thumbsDirectory . '/' . $targetWidth . '/test.jpg');
@@ -52,10 +43,9 @@ class ResizerTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function testFileNoExist()
+    public function testFileNotExist()
     {
-        $result = $this->resizer->createThumbs(realpath(__DIR__ . '/../../assets/no_exist.jpg'));
-
+        $result = $this->generator->generateThumbnails('non_existing_file.jpg');
         $this->assertEmpty($result);
     }
 
