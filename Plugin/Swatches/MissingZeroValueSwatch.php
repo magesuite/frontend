@@ -10,6 +10,15 @@ class MissingZeroValueSwatch
      * Default store ID
      */
     const DEFAULT_STORE_ID = 0;
+    
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    protected $storeManager;
+    /**
+     * @var \Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory
+     */
+    protected $swatchCollectionFactory;
 
 
     public function __construct(
