@@ -3,5 +3,10 @@
         "column": {
             "page_group_identifier": true
         }
+    },
+    "rating_option_vote": {
+        "index": {
+            "RATING_OPTION_VOTE_ENTITY_PK_VALUE": true
+        }
     }
 }
