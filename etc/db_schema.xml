@@ -3,4 +3,9 @@
     <table name="cms_page">
         <column xsi:type="varchar" name="page_group_identifier" nullable="true" length="255" comment="Identifier key for multistore"/>
     </table>
+    <table name="rating_option_vote">
+        <index referenceId="RATING_OPTION_VOTE_ENTITY_PK_VALUE" indexType="btree">
+            <column name="entity_pk_value"/>
+        </index>
+    </table>
 </schema>
