@@ -77,7 +77,7 @@ class Tree
                     if ($id == $categoryId) {
                         continue;
                     }
-                    $sibling['parents'][$categoryId] = $flat[$categoryId];
+                    $sibling['parents'][$categoryId] = $flat[$categoryId] ?? '';
                 }
 
                 $siblings[$k] = $sibling;

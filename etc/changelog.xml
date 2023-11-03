@@ -49,6 +49,13 @@
                     <ticket_id>IPET-1922</ticket_id>
                 </entry>
             </tag>
+            <tag version="3.5.1" date="2023-11-03">
+                <entry>
+                    <type>FIX</type>
+                    <overview>fix for undefined array key</overview>
+                    <ticket_id>HAAR-3821</ticket_id>
+                </entry>
+            </tag>
         </changelog>
     </module>
 </config>
