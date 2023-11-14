@@ -4,4 +4,3 @@
     'MageSuite_Frontend',
     __DIR__
 );
-

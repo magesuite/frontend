@@ -22,7 +22,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Framework\Registry
      */
     private $registry;
-    
+
     /**
      * @var \MageSuite\Frontend\Helper\Product
      */
