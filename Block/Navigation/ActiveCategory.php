@@ -13,7 +13,7 @@ class ActiveCategory extends \Magento\Framework\View\Element\Template
     )
     {
         $this->registry = $registry;
-        
+
         parent::__construct($context, $data);
     }
 
