@@ -74,10 +74,10 @@ class Tree
                 $path = $this->preparePath($sibling['path']);
 
                 foreach ($path as $categoryId) {
-                    if ($id == $categoryId) {
+                    if ($id == $categoryId || !isset($flat[$categoryId])) {
                         continue;
                     }
-                    $sibling['parents'][$categoryId] = $flat[$categoryId] ?? '';
+                    $sibling['parents'][$categoryId] = $flat[$categoryId];
                 }
 
                 $siblings[$k] = $sibling;
