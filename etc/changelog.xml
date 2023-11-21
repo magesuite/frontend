@@ -56,6 +56,13 @@
                     <ticket_id>HAAR-3821</ticket_id>
                 </entry>
             </tag>
+            <tag version="3.5.2" date="2023-11-13">
+                <entry>
+                    <type>FIX</type>
+                    <overview>The previous fix has been withdrawn and a condition has been added to check whether the element of the array we are assigning exists.</overview>
+                    <ticket_id>HAAR-3821</ticket_id>
+                </entry>
+            </tag>
         </changelog>
     </module>
 </config>
