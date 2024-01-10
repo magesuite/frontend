@@ -63,6 +63,13 @@
                     <ticket_id>HAAR-3821</ticket_id>
                 </entry>
             </tag>
+            <tag version="3.5.3" date="2024-01-10">
+                <entry>
+                    <type>FIX</type>
+                    <overview>PHP 8.2 compatibility</overview>
+                    <ticket_id>KRG-2699</ticket_id>
+                </entry>
+            </tag>
         </changelog>
     </module>
 </config>
