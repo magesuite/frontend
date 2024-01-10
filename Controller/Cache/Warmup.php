@@ -13,8 +13,6 @@ class Warmup extends \Magento\Framework\App\Action\Action
     )
     {
         parent::__construct($context);
-
-        $this->context = $context;
         $this->resultPageFactory = $resultPageFactory;
     }
     /**
