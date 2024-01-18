@@ -5,6 +5,10 @@ namespace MageSuite\Frontend\Plugin;
 
 class SortAttributeOptions
 {
+    protected ?array $items = null;
+
+    protected ?array $sortedItems = null;
+
     protected \Magento\Framework\App\ResourceConnection $resource;
 
     public function __construct(\Magento\Framework\App\ResourceConnection $resource)
@@ -14,12 +18,20 @@ class SortAttributeOptions
 
     public function aroundGetAttributeOptions(\Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $subject, $proceed, $superAttribute, $productId)
     {
-        $items = $proceed($superAttribute, $productId);
-
-        if (empty($items)) {
-            return $items;
+        $attributeId = $superAttribute->getAttributeId();
+        if (!isset($this->items[$productId][$attributeId])) {
+            $this->items[$productId][$attributeId] = $proceed($superAttribute, $productId);
         }
 
+        if (empty($this->items[$productId][$attributeId])) {
+            return $this->items[$productId][$attributeId];
+        }
+
+        if (isset($this->sortedItems[$productId][$attributeId])) {
+            return $this->sortedItems[$productId][$attributeId];
+        }
+
+        $items = $this->items[$productId][$attributeId];
         $connection = $this->resource->getConnection();
         $select = $connection->select()->from(
             ['attribute_opt' => $this->resource->getTableName('eav_attribute_option')],
@@ -33,6 +45,7 @@ class SortAttributeOptions
         $sortOrder = array_flip(array_keys($connection->fetchPairs($select)));
 
         if (empty($sortOrder)) {
+            $this->sortedItems[$productId][$attributeId] = $items;
             return $items;
         }
 
@@ -40,6 +53,7 @@ class SortAttributeOptions
             return (int)$sortOrder[$firstElement['value_index'] ?? 0] <=> (int)$sortOrder[$secondElement['value_index'] ?? 0];
         });
 
+        $this->sortedItems[$productId][$attributeId] = $items;
         return $items;
     }
 }
