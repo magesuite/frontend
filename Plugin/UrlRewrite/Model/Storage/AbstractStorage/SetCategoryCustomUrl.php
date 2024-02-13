@@ -4,37 +4,31 @@ namespace MageSuite\Frontend\Plugin\UrlRewrite\Model\Storage\AbstractStorage;
 
 class SetCategoryCustomUrl
 {
-    /**
-     * @var \Magento\Catalog\Model\ResourceModel\Category
-     */
-    protected $categoryResource;
-
-    /**
-     * @var \MageSuite\Frontend\Helper\Category
-     */
-    protected $categoryHelper;
+    protected \Magento\Catalog\Model\ResourceModel\Category $categoryResource;
+    protected \MageSuite\Frontend\Helper\Category $categoryHelper;
+    protected array $urlsCache = [];
 
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Category $categoryResource,
         \MageSuite\Frontend\Helper\Category $categoryHelper
-    ){
+    ) {
         $this->categoryResource = $categoryResource;
         $this->categoryHelper = $categoryHelper;
     }
 
     public function afterFindOneByData(\Magento\UrlRewrite\Model\Storage\AbstractStorage $subject, $result, array $data)
     {
-        if(empty($result)){
+        if (empty($result)) {
             return $result;
         }
 
-        if($result->getEntityType() != \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite::ENTITY_TYPE_CATEGORY){
+        if ($result->getEntityType() != \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite::ENTITY_TYPE_CATEGORY) {
             return $result;
         }
 
         $customUrl = $this->getCategoryCustomUrl($result->getEntityId(), $result->getStoreId());
 
-        if(empty($customUrl)){
+        if (empty($customUrl)) {
             return $result;
         }
 
@@ -43,7 +37,7 @@ class SetCategoryCustomUrl
         $result->setTargetPath($preparedCategoryCustomUrl);
         $result->setRedirectType($this->categoryHelper->getCustomUrlRedirectionType());
 
-        if(strpos($preparedCategoryCustomUrl, 'http') !== false){
+        if (strpos($preparedCategoryCustomUrl, 'http') !== false) {
             $result->setEntityType('custom');
             $result->setEntityId(0);
         }
@@ -53,6 +47,16 @@ class SetCategoryCustomUrl
 
     protected function getCategoryCustomUrl($categoryId, $storeId)
     {
-        return $this->categoryResource->getAttributeRawValue($categoryId, \MageSuite\Frontend\Helper\Category::CATEGORY_CUSTOM_URL, $storeId);
+        $key = sprintf('%s_%s', $categoryId, $storeId);
+
+        if (!array_key_exists($key, $this->urlsCache)) {
+            $this->urlsCache[$key] = $this->categoryResource->getAttributeRawValue(
+                $categoryId,
+                \MageSuite\Frontend\Helper\Category::CATEGORY_CUSTOM_URL,
+                $storeId
+            );
+        }
+
+        return $this->urlsCache[$key];
     }
 }
