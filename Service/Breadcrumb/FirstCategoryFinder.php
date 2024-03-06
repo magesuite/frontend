@@ -42,6 +42,6 @@ class FirstCategoryFinder implements BreadcrumbCategoryFinderInterface
             return null;
         }
 
-        return $this->categoryRepository->get($firstCategoryId, $storeId);
+        return $this->categoryRepository->get($firstCategoryId);
     }
 }
