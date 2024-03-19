@@ -50,7 +50,15 @@ class SortAttributeOptions
         }
 
         uasort($items, function ($firstElement, $secondElement) use ($sortOrder) {
-            return (int)$sortOrder[$firstElement['value_index'] ?? 0] <=> (int)$sortOrder[$secondElement['value_index'] ?? 0];
+            $firstIndex = $firstElement['value_index'] ?? 0;
+            $secondIndex = $secondElement['value_index'] ?? 0;
+
+            $firstValue = isset($sortOrder[$firstIndex]) ? (int)$sortOrder[$firstIndex] : 0;
+            $secondValue = isset($sortOrder[$secondIndex]) ? (int)$sortOrder[$secondIndex] : 0;
+
+            return $firstValue <=> $secondValue;
+            // FR-314
+            // return (int)$sortOrder[$firstElement['value_index'] ?? 0] <=> (int)$sortOrder[$secondElement['value_index'] ?? 0];
         });
 
         $this->sortedItems[$productId][$attributeId] = $items;
