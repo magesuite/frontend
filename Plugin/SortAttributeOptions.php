@@ -57,8 +57,6 @@ class SortAttributeOptions
             $secondValue = isset($sortOrder[$secondIndex]) ? (int)$sortOrder[$secondIndex] : 0;
 
             return $firstValue <=> $secondValue;
-            // FR-314
-            // return (int)$sortOrder[$firstElement['value_index'] ?? 0] <=> (int)$sortOrder[$secondElement['value_index'] ?? 0];
         });
 
         $this->sortedItems[$productId][$attributeId] = $items;
