@@ -77,6 +77,13 @@
                     <ticket_id>KRG-2688</ticket_id>
                 </entry>
             </tag>
+            <tag version="3.5.7" date="2024-03-18">
+                <entry>
+                    <type>FIX</type>
+                    <overview>Option sorting optimization</overview>
+                    <ticket_id>KRG-2688</ticket_id>
+                </entry>
+            </tag>
         </changelog>
     </module>
 </config>
