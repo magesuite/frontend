@@ -6,51 +6,36 @@ class Review extends \Magento\Framework\App\Helper\AbstractHelper
 {
     const MAX_STARS_VALUE = 5;
 
-    /**
-     * @var \Magento\Review\Model\Review
-     */
-    protected $review;
+    protected \Magento\Review\Model\Review $review;
+    protected \Magento\Review\Model\ResourceModel\Rating\Option\Vote\CollectionFactory $voteCollectionFactory;
+    protected \Magento\Store\Model\StoreManagerInterface $storeManager;
+    protected \Magento\Review\Model\ResourceModel\Rating\CollectionFactory $ratingCollectionFactory;
+    protected \Magento\Review\Model\ResourceModel\Review\CollectionFactory $reviewCollectionFactory;
+    protected \MageSuite\Frontend\Model\ReviewVoteRepository $reviewVoteRepository;
+    protected \MageSuite\Frontend\Model\ReviewRepository $reviewRepository;
 
     /**
-     * @var \Magento\Review\Model\ResourceModel\Rating\Option\Vote\CollectionFactory
+     * @var \Magento\Review\Model\Rating[]
      */
-    protected $voteCollectionFactory;
-
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    protected $storeManager;
-
-    /**
-     * @var \Magento\Review\Model\ResourceModel\Rating\CollectionFactory
-     */
-    protected $ratingCollectionFactory;
-
-    /**
-     * @var \Magento\Review\Model\Rating[]|null
-     */
-    protected $ratings = null;
-
-    /**
-     * @var \Magento\Review\Model\ResourceModel\Review\CollectionFactory
-     */
-    protected $reviewCollectionFactory;
+    protected ?array $ratings = null;
 
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Review\Model\Review $review,
-        \Magento\Review\Model\ResourceModel\Rating\Option\Vote\CollectionFactory $voteCollectionFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Review\Model\ResourceModel\Rating\CollectionFactory $ratingCollectionFactory,
-        \Magento\Review\Model\ResourceModel\Review\CollectionFactory $reviewCollectionFactory
+        \Magento\Review\Model\ResourceModel\Review\CollectionFactory $reviewCollectionFactory,
+        \MageSuite\Frontend\Model\ReviewVoteRepository $reviewVoteRepository,
+        \MageSuite\Frontend\Model\ReviewRepository $reviewRepository
     ) {
         parent::__construct($context);
 
         $this->review = $review;
-        $this->voteCollectionFactory = $voteCollectionFactory;
         $this->storeManager = $storeManager;
         $this->ratingCollectionFactory = $ratingCollectionFactory;
         $this->reviewCollectionFactory = $reviewCollectionFactory;
+        $this->reviewVoteRepository = $reviewVoteRepository;
+        $this->reviewRepository = $reviewRepository;
     }
 
     public function getReviewSummary($product, $includeVotes = false)
@@ -95,24 +80,21 @@ class Review extends \Magento\Framework\App\Helper\AbstractHelper
 
     protected function prepareAdditionalRatingData($reviewData, $productId, $storeId)
     {
-        $votes = $this->voteCollectionFactory
-            ->create()
-            ->setEntityPkFilter($productId)
-            ->setStoreFilter($storeId);
+        $votes = $this->reviewVoteRepository->getVotesByEntity($productId, $storeId);
 
         $groupedVotes = [
             'review' => [],
             'rating' => []
         ];
 
-        foreach ($votes->getItems() as $vote) {
+        foreach ($votes as $vote) {
             $vote->getData();
             $groupedVotes['review'][$vote->getReviewId()][] = $vote->getPercent();
             $groupedVotes['rating'][$vote->getRatingId()][] = $vote->getPercent();
         }
 
         $ratings = $this->getRatings();
-        $approvedReviews = $this->getApprovedReviewIds($productId);
+        $approvedReviews = $this->reviewRepository->getApprovedReviewsIdsByEntity($productId, $storeId);
 
         foreach ($groupedVotes as $type => $group) {
             foreach ($group as $typeId => $votes) {
@@ -128,22 +110,6 @@ class Review extends \Magento\Framework\App\Helper\AbstractHelper
         }
 
         return $reviewData;
-    }
-
-    protected function getApprovedReviewIds($productId)
-    {
-        $result = [];
-
-        $collection = $this->reviewCollectionFactory->create()
-            ->addStoreFilter($this->storeManager->getStore()->getId())
-            ->addStatusFilter(\Magento\Review\Model\Review::STATUS_APPROVED)
-            ->addEntityFilter('product', $productId)
-            ->setDateOrder();
-
-        foreach ($collection as $item) {
-            $result[] = (int)$item->getId();
-        }
-        return $result;
     }
 
     protected function getStarsAmount($value)
