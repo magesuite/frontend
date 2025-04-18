@@ -98,18 +98,23 @@ class Review extends \Magento\Framework\App\Helper\AbstractHelper
 
         foreach ($groupedVotes as $type => $group) {
             foreach ($group as $typeId => $votes) {
-                $starsAmount = $this->getStarsAmount($votes);
+                $averageRating = $this->getAverageRating($votes);
 
                 if ($type == 'review' && in_array($typeId, $approvedReviews)) {
-                    $reviewData['data']['votes'][$this->roundReviewStarsAmount($starsAmount)]++;
+                    $reviewData['data']['votes'][$this->getRoundReviewStarsAmount($averageRating)]++;
                 } elseif ($type == 'rating') {
-                    $reviewData['data']['ratings'][$typeId]['starsAmount'] = $starsAmount;
+                    $reviewData['data']['ratings'][$typeId]['starsAmount'] = $this->getStarsAmount($averageRating);
                     $reviewData['data']['ratings'][$typeId]['label'] = isset($ratings[$typeId]) ? $ratings[$typeId]->getRatingCode() : null;
                 }
             }
         }
 
         return $reviewData;
+    }
+
+    protected function getAverageRating(array $votes): float
+    {
+        return array_sum($votes) / count($votes);
     }
 
     protected function getStarsAmount($value)
@@ -121,9 +126,9 @@ class Review extends \Magento\Framework\App\Helper\AbstractHelper
         return round($value / 10) / 2;
     }
 
-    protected function roundReviewStarsAmount($startsAmount)
+    protected function getRoundReviewStarsAmount(float $rating): int
     {
-        return round($startsAmount);
+        return round($rating / 20);
     }
 
     /**
