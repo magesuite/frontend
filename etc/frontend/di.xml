@@ -34,4 +34,10 @@
             sortOrder="10"
         />
     </type>
+
+    <type name="Magento\Widget\Block\BlockInterface">
+        <plugin name="decode_widget_content"
+                type="MageSuite\Frontend\Plugin\Magento\Widget\Block\BlockInterface\DecodeWidgetContent"
+                sortOrder="10"/>
+    </type>
 </config>
