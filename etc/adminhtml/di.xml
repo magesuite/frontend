@@ -17,4 +17,18 @@
             </argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Widget\Model\Widget\Instance">
+        <plugin
+            name="encode_widget_content"
+            type="MageSuite\Frontend\Plugin\Magento\Widget\Model\Widget\Instance\EncodeWidgetContent"
+            sortOrder="1000"
+        />
+    </type>
+    <type name="Magento\Widget\Block\Adminhtml\Widget\Options">
+        <plugin
+            name="decode_widget_options"
+            type="MageSuite\Frontend\Plugin\Magento\Widget\Block\Adminhtml\Widget\Options\DecodeWidgetOptions"
+            sortOrder="10"
+        />
+    </type>
 </config>
