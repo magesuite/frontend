@@ -46,23 +46,19 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     public function testItReturnsIsNew($fromDate, $toDate, $date, $expected)
     {
-        $productStub = $this->prepareProductStubForIsNew($fromDate, $toDate);
+        $productStub = $this->prepareProductForIsNew($fromDate, $toDate);
 
         $this->assertEquals($expected, $this->productHelper->isNew($productStub, $date));
     }
 
 
-    protected function prepareProductStubForIsNew($fromDate, $toDate)
+    protected function prepareProductForIsNew($fromDate, $toDate)
     {
-        /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $productStub */
-        $productStub = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getNewsFromDate', 'getNewsToDate'])
-            ->getMock();
+        $product = $this->objectManager->get(\Magento\Catalog\Model\Product::class);
 
-        $productStub->method('getNewsFromDate')->willReturn($fromDate);
-        $productStub->method('getNewsToDate')->willReturn($toDate);
-
-        return $productStub;
+        return $product->setData([
+            'news_from_date' => $fromDate,
+            'news_to_date' => $toDate
+        ]);
     }
 }
