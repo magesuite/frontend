@@ -29,7 +29,7 @@ class DecodeWidgetOptions
 
             $param = $widgetValues[$key];
 
-            if ($param && is_string($param) && $this->paramsToDecodeConfig->isBase64Encoded($param)) {
+            if (is_string($param) && $this->paramsToDecodeConfig->isBase64Encoded($param)) {
                 $widgetValues[$key] =  base64_decode((string)$param);
                 $dataHasChanged = true;
             }

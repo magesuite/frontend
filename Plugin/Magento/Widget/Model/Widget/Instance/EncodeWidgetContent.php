@@ -27,7 +27,7 @@ class EncodeWidgetContent
                 continue;
             }
 
-            if ($params[$key] && is_string($params[$key])) {
+            if (is_string($params[$key])) {
                 $params[$key] = base64_decode($params[$key]);
                 $paramsEncoded = true;
             }

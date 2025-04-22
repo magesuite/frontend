@@ -23,7 +23,7 @@ class DecodeWidgetContent
 
             $param = $params[$key];
 
-            if (isset($param) && is_string($param) && $this->paramsToDecodeConfig->isBase64Encoded($param)) {
+            if (is_string($param) && $this->paramsToDecodeConfig->isBase64Encoded($param)) {
                 $subject->setData($key, base64_decode((string)$param));
             }
         }
