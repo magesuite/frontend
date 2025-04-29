@@ -42,6 +42,10 @@ class StockData extends \Magento\Framework\App\Helper\AbstractHelper
             }
         }
 
+        if (empty($productIds)) {
+            return $return;
+        }
+
         $stockStatuses = $this->stockHelper->getStockStatuses($productIds);
 
         foreach ($productCollection as $productId => $product) {
