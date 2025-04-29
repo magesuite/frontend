@@ -2,12 +2,9 @@
 
 namespace MageSuite\Frontend\Model;
 
-use Magento\Catalog\Model\Category;
-
 class CategoryUrlRewriteGenerator extends \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator
 {
-
-    protected function updateCategoryUrlForStore($storeId, Category $category = null)
+    protected function updateCategoryUrlForStore($storeId, ?\Magento\Catalog\Model\Category $category = null)
     {
         /**
          * Rewrited Magento core class because wrong url rewrite is created for the new category when we have multistore.
@@ -25,5 +22,4 @@ class CategoryUrlRewriteGenerator extends \Magento\CatalogUrlRewrite\Model\Categ
             parent::updateCategoryUrlForStore($storeId, $category);
         }
     }
-
 }
