@@ -81,7 +81,7 @@ class Category extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository,
         \Magento\Eav\Model\Config $eavConfig,
         \MageSuite\CategoryIcon\Helper\CategoryIcon $categoryIconHelper,
-        \Magento\Catalog\Model\CategoryFactory $categoryFactory = null
+        ?\Magento\Catalog\Model\CategoryFactory $categoryFactory = null
     ) {
         parent::__construct($context);
 
