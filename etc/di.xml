@@ -97,7 +97,7 @@
                 </item>
             </argument>
         </arguments>
-        <plugin name="m2c_svg_handler" type="MageSuite\Frontend\Plugin\WysiwygImagesStoragePlugin"/>
+        <plugin name="allow_uploading_svg" type="MageSuite\Frontend\Plugin\Magento\Cms\Model\Wysiwyg\Images\Storage\AllowUploadingSvg" sortOrder="10"/>
     </type>
 
     <virtualType name="Magento\Catalog\CategoryImageUpload" type="Magento\Catalog\Model\ImageUploader">
