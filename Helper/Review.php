@@ -4,7 +4,7 @@ namespace MageSuite\Frontend\Helper;
 
 class Review extends \Magento\Framework\App\Helper\AbstractHelper
 {
-    const MAX_STARS_VALUE = 5;
+    public const MAX_STARS_VALUE = 5;
 
     protected \Magento\Review\Model\Review $review;
     protected \Magento\Review\Model\ResourceModel\Rating\Option\Vote\CollectionFactory $voteCollectionFactory;
@@ -42,10 +42,10 @@ class Review extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $reviewData = [
             'data' => [
-                'maxStars' => self::MAX_STARS_VALUE,
+                'maxStars' => $this->getMaxStarsValue(),
                 'activeStars' => 0,
                 'count' => 0,
-                'votes' => array_fill(1, self::MAX_STARS_VALUE, 0),
+                'votes' => array_fill(1, $this->getMaxStarsValue(), 0),
                 'ratings' => []
             ]
         ];
@@ -153,5 +153,10 @@ class Review extends \Magento\Framework\App\Helper\AbstractHelper
         }
 
         return $this->ratings;
+    }
+
+    public function getMaxStarsValue(): int
+    {
+        return self::MAX_STARS_VALUE;
     }
 }
