@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace MageSuite\Frontend\Plugin\Magento\Cms\Model\Wysiwyg\Images\Storage;
 
-class AllowUploadingSvg
+class AllowUploadingAdditionalFileTypes
 {
-    protected const SVG_FILE_EXTENSION = 'svg';
+    protected const ADDITIONAL_FILE_TYPES = ['svg', 'webp', 'webm'];
     protected \Magento\Framework\Filesystem\Directory\ReadInterface $directory;
 
     public function __construct(
@@ -24,7 +24,7 @@ class AllowUploadingSvg
     ) {
         $fileExtension = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
 
-        if ($fileExtension == self::SVG_FILE_EXTENSION) {
+        if (in_array($fileExtension, self::ADDITIONAL_FILE_TYPES)) {
             return false;
         }
 
@@ -39,10 +39,10 @@ class AllowUploadingSvg
     ) {
         $fileExtension = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
 
-        if ($fileExtension == self::SVG_FILE_EXTENSION) {
+        if (in_array($fileExtension, self::ADDITIONAL_FILE_TYPES)) {
             $mediaRootDir = $this->directory->getAbsolutePath();
 
-            if (strpos($filePath, $mediaRootDir) === 0) {
+            if (str_starts_with($filePath, $mediaRootDir)) {
                 return str_replace(
                     '\\',
                     '/',
@@ -64,8 +64,6 @@ class AllowUploadingSvg
     ) {
         $fileExtension = strtolower(pathinfo($source, PATHINFO_EXTENSION));
 
-        return $fileExtension !== self::SVG_FILE_EXTENSION
-            ? $proceed($source, $keepRation)
-            : false;
+        return !in_array($fileExtension, self::ADDITIONAL_FILE_TYPES) ? $proceed($source, $keepRation) : false;
     }
 }
