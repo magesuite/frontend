@@ -1,27 +1,48 @@
 <?php
-// @codingStandardsIgnoreFile
+/**
+ * Template overwritten in order to hide print order button on some conditions
+ * Aligned with Magento_Sales and Magento_OrderCancellationUi 2.4.7 in 07/2025
+ */
 
+// phpcs:disable Magento2.Templates.ThisInTemplate
+
+/** @var $viewModel \Magento\OrderCancellationUi\ViewModel\Config */
+$viewModel = $block->getViewModel();
 ?>
 <div class="actions">
-    <?php  $order = $block->getOrder() ?>
-        <?php if ($this->helper('Magento\Sales\Helper\Reorder')->canReorder($order->getEntityId())) : ?>
-            <a
-                class="action order"
-                href="#"
-                data-post='<?php /* @escapeNotVerified */ echo $this->helper(\Magento\Framework\Data\Helper\PostHelper::class)->getPostData($block->getReorderUrl($order)) ?>'
-            >
-                <span><?php /* @escapeNotVerified */ echo __('Reorder') ?></span>
-            </a>
-        <?php endif ?>
-        <?php if ($this->helper(\MageSuite\Frontend\Helper\Order::class)->canPrintOrder()) : ?>
-            <a
-                class="action print"
-                href="<?php /* @escapeNotVerified */ echo $block->getPrintUrl($order) ?>"
-                onclick="this.target='_blank';"
-            >
-                <span><?php /* @escapeNotVerified */ echo __('Print Order') ?></span>
-            </a>
-        <?php endif ?>
-
-    <?php echo $block->getChildHtml(); ?>
+    <?php $_order = $block->getOrder() ?>
+    <?php if ($this->helper(\Magento\Sales\Helper\Reorder::class)->canReorder($_order->getEntityId())): ?>
+        <a href="#" data-post='<?=
+        /* @noEscape */ $this->helper(\Magento\Framework\Data\Helper\PostHelper::class)
+            ->getPostData($block->getReorderUrl($_order))
+        ?>' class="action order">
+            <span><?= $block->escapeHtml(__('Reorder')) ?></span>
+        </a>
+    <?php endif ?>
+    <?php if ($viewModel && $viewModel->canCancel($_order->getEntityId())): ?>
+        <a href="#" class="cancel-order"
+            id="cancel-order-<?=/* @noEscape */ $_order->getId() ?>" data-mage-init='{
+            "cancelOrderModal":{
+                "url": "<?=/* @noEscape */ $block->getBaseUrl(); ?>",
+                "order_id": "<?= $block->escapeHtml(__($_order->getId())); ?>"
+            }
+        }'>
+            <span><?= $block->escapeHtml(__('Cancel Order')) ?></span>
+        </a>
+    <?php endif ?>
+    <?php if ($this->helper(\MageSuite\Frontend\Helper\Order::class)->canPrintOrder()) : ?>
+        <a href="<?= $block->escapeUrl($block->getPrintUrl($_order)) ?>"
+           class="action print"
+           target="_blank"
+           rel="noopener">
+            <span><?= $block->escapeHtml(__('Print Order')) ?></span>
+        </a>
+    <?php endif ?>
+    <?php echo $block->getChildHtml() ?>
 </div>
+
+<?php if ($viewModel && $viewModel->canCancel($_order->getEntityId())): ?>
+    <?= $this->getLayout()->createBlock("Magento\Framework\View\Element\Template")->setOrder($_order)
+        ->setReasons($viewModel->getCancellationReasons($_order->getEntityId()))
+        ->setTemplate("Magento_OrderCancellationUi::cancel-order-modal.phtml")->toHtml() ?>
+<?php endif ?>

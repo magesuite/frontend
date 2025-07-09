@@ -91,6 +91,13 @@
                     <ticket_id>IPET-482</ticket_id>
                 </entry>
             </tag>
+            <tag version="3.5.25" date="2025-07-08">
+                <entry>
+                    <type>FEATURE</type>
+                    <overview>Restore order cancellation possibility for user in order view</overview>
+                    <ticket_id>MGS-5573</ticket_id>
+                </entry>
+            </tag>
         </changelog>
     </module>
 </config>
