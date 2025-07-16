@@ -1,18 +1,11 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-
     <preference for="MageSuite\Frontend\Service\Breadcrumb\BreadcrumbCategoryFinderInterface" type="MageSuite\Frontend\Service\Breadcrumb\FirstCategoryFinder"/>
-
     <preference for="Magento\Catalog\Model\Product\Image" type="MageSuite\Frontend\Model\Product\Image"/>
-
     <preference for="Magento\ConfigurableProduct\Model\Product\Type\Configurable" type="MageSuite\Frontend\Model\Product\Type\Configurable"/>
-
     <preference for="MageSuite\Frontend\Service\AssetLocator" type="MageSuite\Frontend\Service\MagentoAssetLocator"/>
-
     <preference for="Magento\Catalog\Controller\Adminhtml\Category\Save" type="MageSuite\Frontend\Controller\Adminhtml\Category\Save"/>
-
-    <preference for="Magento\Catalog\Pricing\Price\MinimalPriceCalculatorInterface" type="MageSuite\Frontend\Pricing\Price\MinimalFinalPriceCalculator" />
-
+    <preference for="Magento\Catalog\Pricing\Price\MinimalPriceCalculatorInterface" type="MageSuite\Frontend\Pricing\Price\MinimalFinalPriceCalculator"/>
     <preference for="Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator" type="MageSuite\Frontend\Model\CategoryUrlRewriteGenerator"/>
 
     <type name="Magento\Catalog\Model\Category\Attribute\Backend\Image">
@@ -52,15 +45,15 @@
     </type>
 
     <type name="Magento\Catalog\Block\Product\ListProduct">
-        <plugin name="category_view_change" type="MageSuite\Frontend\Plugin\CategoryView" />
+        <plugin name="category_view_change" type="MageSuite\Frontend\Plugin\CategoryView"/>
     </type>
 
     <type name="Magento\Catalog\Block\Product\View\GalleryOptions">
-        <plugin name="add_maxheight_to_fotorama_options_json" type="MageSuite\Frontend\Plugin\Catalog\Block\Product\View\GalleryOptions\AddMaxheightToFotoramaOptionsJson" />
+        <plugin name="add_maxheight_to_fotorama_options_json" type="MageSuite\Frontend\Plugin\Catalog\Block\Product\View\GalleryOptions\AddMaxheightToFotoramaOptionsJson"/>
     </type>
 
     <type name="Magento\Catalog\Helper\Product\ProductList">
-        <plugin name="category_view_switcher" type="MageSuite\Frontend\Plugin\CategoryViewSwitcher" />
+        <plugin name="category_view_switcher" type="MageSuite\Frontend\Plugin\CategoryViewSwitcher"/>
     </type>
 
     <type name="Magento\ProductAlert\Controller\Add">
@@ -72,7 +65,7 @@
     </type>
 
     <type name="Magento\Bundle\Pricing\Render\FinalPriceBox">
-        <plugin name="hide_range_price_in_simplified_bundle" type="\MageSuite\Frontend\Plugin\Bundle\Pricing\Render\FinalPriceBox\HideRangePriceInSimplifiedBundle" />
+        <plugin name="hide_range_price_in_simplified_bundle" type="\MageSuite\Frontend\Plugin\Bundle\Pricing\Render\FinalPriceBox\HideRangePriceInSimplifiedBundle"/>
     </type>
 
     <type name="Magento\Framework\HTTP\PhpEnvironment\RemoteAddress">
@@ -97,7 +90,7 @@
                 </item>
             </argument>
         </arguments>
-        <plugin name="allow_uploading_svg" type="MageSuite\Frontend\Plugin\Magento\Cms\Model\Wysiwyg\Images\Storage\AllowUploadingSvg" sortOrder="10"/>
+        <plugin name="allow_uploading_additional_file_types" type="MageSuite\Frontend\Plugin\Magento\Cms\Model\Wysiwyg\Images\Storage\AllowUploadingAdditionalFileTypes" sortOrder="10"/>
     </type>
 
     <virtualType name="Magento\Catalog\CategoryImageUpload" type="Magento\Catalog\Model\ImageUploader">
@@ -116,15 +109,15 @@
     </type>
 
     <type name="\Magento\Cms\Controller\Adminhtml\Wysiwyg\Directive">
-        <plugin name="directivePlugin" type="\MageSuite\Frontend\Plugin\PreserveTransparencyOnModal" sortOrder="1" />
+        <plugin name="directivePlugin" type="\MageSuite\Frontend\Plugin\PreserveTransparencyOnModal" sortOrder="1"/>
     </type>
 
     <type name="Magento\Catalog\Block\Product\View">
-        <plugin name="re_add_breadcrumbs_to_product_view" type="MageSuite\Frontend\Plugin\ReAddBreadcrumbsToProductView" />
+        <plugin name="re_add_breadcrumbs_to_product_view" type="MageSuite\Frontend\Plugin\ReAddBreadcrumbsToProductView"/>
     </type>
 
     <type name="Magento\Cms\Block\Widget\Page\Link">
-        <plugin name="get_page_url_by_group_identifier" type="MageSuite\Frontend\Plugin\Cms\Block\Widget\Page\Link\GetPageUrlByGroupIdentifier" />
+        <plugin name="get_page_url_by_group_identifier" type="MageSuite\Frontend\Plugin\Cms\Block\Widget\Page\Link\GetPageUrlByGroupIdentifier"/>
     </type>
 
     <type name="MageSuite\Opengraph\Service\TagsCollector">
@@ -141,23 +134,23 @@
     </type>
 
     <type name="Magento\Catalog\Model\Product\Type\AbstractType">
-        <plugin name="allow_buying_simplified_bundle_from_list" type="MageSuite\Frontend\Plugin\Catalog\Model\Product\Type\AbstractType\AllowBuyingSimplifiedBundleFromList" />
+        <plugin name="allow_buying_simplified_bundle_from_list" type="MageSuite\Frontend\Plugin\Catalog\Model\Product\Type\AbstractType\AllowBuyingSimplifiedBundleFromList"/>
     </type>
 
     <type name="Magento\Catalog\Block\Product\ListProduct">
-        <plugin name="add_bundle_selections_to_simplified_bundle" type="MageSuite\Frontend\Plugin\Catalog\Block\Product\ListProduct\AddBundleSelectionsToSimplifiedBundle" />
+        <plugin name="add_bundle_selections_to_simplified_bundle" type="MageSuite\Frontend\Plugin\Catalog\Block\Product\ListProduct\AddBundleSelectionsToSimplifiedBundle"/>
     </type>
 
     <type name="Magento\Framework\App\ProductMetadataInterface">
-        <plugin name="cache_magento_version" type="MageSuite\Frontend\Plugin\Framework\App\ProductMetadataInterface\CacheVersion" />
+        <plugin name="cache_magento_version" type="MageSuite\Frontend\Plugin\Framework\App\ProductMetadataInterface\CacheVersion"/>
     </type>
 
     <type name="Magento\Sitemap\Model\ItemProvider\Category">
-        <plugin name="replace_category_url_with_custom_category_url" type="MageSuite\Frontend\Plugin\Sitemap\Model\ItemProvider\Category\ReplaceCategoryUrlWithCustomCategoryUrl" sortOrder="2" />
+        <plugin name="replace_category_url_with_custom_category_url" type="MageSuite\Frontend\Plugin\Sitemap\Model\ItemProvider\Category\ReplaceCategoryUrlWithCustomCategoryUrl" sortOrder="2"/>
     </type>
 
     <type name="Magento\Cms\Model\Block">
-        <plugin name="add_id_to_cache_keys" type="MageSuite\Frontend\Plugin\Block\Model\Block\AddIdToCacheKeys" sortOrder="10" />
+        <plugin name="add_id_to_cache_keys" type="MageSuite\Frontend\Plugin\Block\Model\Block\AddIdToCacheKeys" sortOrder="10"/>
     </type>
 
     <type name="Magento\Version\Controller\Index\Index">
