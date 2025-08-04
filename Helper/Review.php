@@ -1,44 +1,28 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageSuite\Frontend\Helper;
 
-class Review extends \Magento\Framework\App\Helper\AbstractHelper
+class Review
 {
     public const MAX_STARS_VALUE = 5;
-
-    protected \Magento\Review\Model\Review $review;
-    protected \Magento\Review\Model\ResourceModel\Rating\Option\Vote\CollectionFactory $voteCollectionFactory;
-    protected \Magento\Store\Model\StoreManagerInterface $storeManager;
-    protected \Magento\Review\Model\ResourceModel\Rating\CollectionFactory $ratingCollectionFactory;
-    protected \Magento\Review\Model\ResourceModel\Review\CollectionFactory $reviewCollectionFactory;
-    protected \MageSuite\Frontend\Model\ReviewVoteRepository $reviewVoteRepository;
-    protected \MageSuite\Frontend\Model\ReviewRepository $reviewRepository;
 
     /**
      * @var \Magento\Review\Model\Rating[]
      */
-    protected ?array $ratings = null;
+    protected array $ratings;
 
     public function __construct(
-        \Magento\Framework\App\Helper\Context $context,
-        \Magento\Review\Model\Review $review,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Review\Model\ResourceModel\Rating\CollectionFactory $ratingCollectionFactory,
-        \Magento\Review\Model\ResourceModel\Review\CollectionFactory $reviewCollectionFactory,
-        \MageSuite\Frontend\Model\ReviewVoteRepository $reviewVoteRepository,
-        \MageSuite\Frontend\Model\ReviewRepository $reviewRepository
-    ) {
-        parent::__construct($context);
+        protected \Magento\Store\Model\StoreManagerInterface $storeManager,
+        protected \Magento\Review\Model\ResourceModel\Rating\CollectionFactory $ratingCollectionFactory,
+        protected \Magento\Review\Model\ResourceModel\Review\CollectionFactory $reviewCollectionFactory,
+        protected \MageSuite\Frontend\Model\ReviewVoteRepository $reviewVoteRepository,
+        protected \MageSuite\Frontend\Model\ReviewRepository $reviewRepository,
+        protected \Magento\Review\Model\AppendSummaryData $appendSummaryData,
+    ) {}
 
-        $this->review = $review;
-        $this->storeManager = $storeManager;
-        $this->ratingCollectionFactory = $ratingCollectionFactory;
-        $this->reviewCollectionFactory = $reviewCollectionFactory;
-        $this->reviewVoteRepository = $reviewVoteRepository;
-        $this->reviewRepository = $reviewRepository;
-    }
-
-    public function getReviewSummary($product, $includeVotes = false)
+    public function getReviewSummary(\Magento\Catalog\Model\Product $product, bool $includeVotes = false): array
     {
         $reviewData = [
             'data' => [
@@ -46,45 +30,45 @@ class Review extends \Magento\Framework\App\Helper\AbstractHelper
                 'activeStars' => 0,
                 'count' => 0,
                 'votes' => array_fill(1, $this->getMaxStarsValue(), 0),
-                'ratings' => []
-            ]
+                'ratings' => [],
+            ],
         ];
 
-        if ($product) {
-            $storeId = $this->storeManager->getStore()->getId();
+        $storeId = (int)$this->storeManager->getStore()->getId();
+
+        $ratingSummary = $product->getRatingSummary();
+
+        if (!$ratingSummary) {
+            $this->appendReviewSummary($product, $storeId);
             $ratingSummary = $product->getRatingSummary();
-            $reviewsCount = $product->getReviewsCount();
+        }
 
-            if (!$ratingSummary) {
-                $this->review->getEntitySummary($product, $storeId);
-                $ratingSummary = $product->getRatingSummary();
-            }
-            // Since 2.3.3 rating summary is being returned directly, not as an object.
-            if (is_object($ratingSummary)) {
-                $reviewsCount = $ratingSummary->getReviewsCount();
-                $ratingSummary = $ratingSummary->getRatingSummary();
-            }
+        $reviewsCount = $product->getReviewsCount();
 
-            if ($ratingSummary) {
-                $reviewData['data']['activeStars'] = $ratingSummary ? $this->getStarsAmount($ratingSummary) : 0;
-                $reviewData['data']['count'] = $reviewsCount;
+        if ($ratingSummary) {
+            $reviewData['data']['activeStars'] = $this->getStarsAmount($ratingSummary);
+            $reviewData['data']['count'] = $reviewsCount;
 
-                if ($includeVotes && $reviewData['data']['count']) {
-                    $reviewData = $this->prepareAdditionalRatingData($reviewData, $product->getId(), $storeId);
-                }
+            if ($includeVotes && $reviewData['data']['count']) {
+                $reviewData = $this->prepareAdditionalRatingData($reviewData, (int)$product->getId(), $storeId);
             }
         }
 
         return $reviewData;
     }
 
-    protected function prepareAdditionalRatingData($reviewData, $productId, $storeId)
+    public function appendReviewSummary(\Magento\Catalog\Model\Product $product, int $storeId): void
     {
-        $votes = $this->reviewVoteRepository->getVotesByEntity($productId, $storeId);
+        $this->appendSummaryData->execute($product, $storeId, \Magento\Review\Model\Review::ENTITY_PRODUCT_CODE);
+    }
+
+    public function prepareAdditionalRatingData(array $reviewData, int $productId, int $storeId): array
+    {
+        $votes = $this->getVotes($productId, $storeId);
 
         $groupedVotes = [
             'review' => [],
-            'rating' => []
+            'rating' => [],
         ];
 
         foreach ($votes as $vote) {
@@ -94,7 +78,7 @@ class Review extends \Magento\Framework\App\Helper\AbstractHelper
         }
 
         $ratings = $this->getRatings();
-        $approvedReviews = $this->reviewRepository->getApprovedReviewsIdsByEntity($productId, $storeId);
+        $approvedReviews = $this->getApprovedReviews($productId, $storeId);
 
         foreach ($groupedVotes as $type => $group) {
             foreach ($group as $typeId => $votes) {
@@ -112,51 +96,59 @@ class Review extends \Magento\Framework\App\Helper\AbstractHelper
         return $reviewData;
     }
 
-    protected function getAverageRating(array $votes): float
+    public function getVotes(int $productId, int $storeId): array
     {
-        return array_sum($votes) / count($votes);
-    }
-
-    protected function getStarsAmount($value)
-    {
-        if (is_array($value)) {
-            $value = array_sum($value) / count($value);
-        }
-
-        return round($value / 10) / 2;
-    }
-
-    protected function getRoundReviewStarsAmount(float $rating): int
-    {
-        return round($rating / 20);
+        return $this->reviewVoteRepository->getVotesByEntity($productId, $storeId);
     }
 
     /**
-     * @return \Magento\Review\Model\Rating[]|null
+     * @return \Magento\Review\Model\Rating[]
+     *
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function getRatings()
+    public function getRatings(): array
     {
-        if ($this->ratings == null) {
+        if (!isset($this->ratings)) {
             $storeId = $this->storeManager->getStore()->getId();
 
             $ratings = $this->ratingCollectionFactory->create()
                 ->addEntityFilter('product')
                 ->setPositionOrder()
                 ->setStoreFilter($storeId)
-                ->addRatingPerStoreName($storeId)
-                ->load();
+                ->addRatingPerStoreName($storeId);
 
-            /** @var \Magento\Review\Model\Rating $rating */
-            foreach ($ratings as $rating) {
-                $this->ratings[$rating->getId()] = $rating;
-            }
+            $this->ratings = $ratings->getItems();
         }
 
         return $this->ratings;
     }
 
+    public function getApprovedReviews(int $productId, int $storeId): array
+    {
+        return $this->reviewRepository->getApprovedReviewsIdsByEntity($productId, $storeId);
+    }
+
     public function getMaxStarsValue(): int
     {
         return self::MAX_STARS_VALUE;
+    }
+
+    protected function getAverageRating(array $votes): float
+    {
+        return array_sum($votes) / count($votes);
+    }
+
+    protected function getStarsAmount(array|float|string $value): string
+    {
+        if (is_array($value)) {
+            $value = array_sum($value) / count($value);
+        }
+
+        return number_format($value / 10 / 2, 2);
+    }
+
+    protected function getRoundReviewStarsAmount(float $rating): int
+    {
+        return (int)round($rating / 20);
     }
 }

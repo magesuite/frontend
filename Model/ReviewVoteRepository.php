@@ -12,6 +12,9 @@ class ReviewVoteRepository
         $this->voteCollectionFactory = $voteCollectionFactory;
     }
 
+    /**
+     * @return \Magento\Review\Model\Rating\Option\Vote[]
+     */
     public function getVotesByEntity(int $entityId, ?int $storeId = null): array
     {
         if (array_key_exists($entityId, $this->votesByEntity)) {
@@ -21,6 +24,9 @@ class ReviewVoteRepository
         return $this->getVotesByEntities([$entityId], $storeId);
     }
 
+    /**
+     * @return \Magento\Review\Model\Rating\Option\Vote[]
+     */
     public function getVotesByEntities(array $entityIds, ?int $storeId = null): array
     {
         $votes = $this->voteCollectionFactory->create();
