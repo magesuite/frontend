@@ -56,12 +56,12 @@ class ReviewRepository
 
         $result = $this->connection->fetchAll($select);
 
-        foreach($result as $reviewId) {
+        foreach ($result as $reviewId) {
             $this->approvedReviewsIdsByEntity[$reviewId['entity_pk_value']][] = $reviewId['review_id'];
         }
 
-        foreach($entityIds as $entityId) {
-            if(isset($this->approvedReviewsIdsByEntity[$entityId])) {
+        foreach ($entityIds as $entityId) {
+            if (isset($this->approvedReviewsIdsByEntity[$entityId])) {
                 continue;
             }
 
