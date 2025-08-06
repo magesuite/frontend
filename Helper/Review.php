@@ -45,6 +45,11 @@ class Review
 
         $reviewsCount = $product->getReviewsCount();
 
+        if (is_object($ratingSummary)) {
+            $reviewsCount = $ratingSummary->getReviewsCount();
+            $ratingSummary = $ratingSummary->getRatingSummary();
+        }
+
         if ($ratingSummary) {
             $reviewData['data']['activeStars'] = $this->getStarsAmount($ratingSummary);
             $reviewData['data']['count'] = $reviewsCount;
