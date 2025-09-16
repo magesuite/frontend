@@ -38,7 +38,7 @@ class Review
 
         $ratingSummary = $product->getRatingSummary();
 
-        if (!$ratingSummary) {
+        if (!$product->hasData('rating_summary')) {
             $this->appendReviewSummary($product, $storeId);
             $ratingSummary = $product->getRatingSummary();
         }
