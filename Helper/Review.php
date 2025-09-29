@@ -138,18 +138,18 @@ class Review
         return self::MAX_STARS_VALUE;
     }
 
-    protected function getAverageRating(array $votes): float
-    {
-        return array_sum($votes) / count($votes);
-    }
-
-    protected function getStarsAmount(array|float|string $value): string
+    public function getStarsAmount(array|float|string $value): string
     {
         if (is_array($value)) {
             $value = array_sum($value) / count($value);
         }
 
         return number_format($value / 10 / 2, 2);
+    }
+
+    protected function getAverageRating(array $votes): float
+    {
+        return array_sum($votes) / count($votes);
     }
 
     protected function getRoundReviewStarsAmount(float $rating): int
