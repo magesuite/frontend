@@ -4,22 +4,17 @@ namespace MageSuite\Frontend\Model\Category;
 
 class Tree
 {
-    const CACHE_LIFETIME = 86400;
-    const CACHE_TAG = 'category_tree_%s_%s_%s';
+    public const CACHE_LIFETIME = 86400;
+    public const CACHE_TAG = 'category_tree_%s_%s_%s';
 
-    protected int $rootCategoryId;
+    protected ?int $rootCategoryId;
+    protected bool $includeNumberOfProductForVirtualCategory;
 
     protected \Magento\Framework\App\CacheInterface $cache;
-
     protected \Magento\Framework\Serialize\Serializer\Serialize $serializer;
-
     protected \Magento\Store\Model\StoreManagerInterface $storeManager;
-
     protected \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory;
-
     protected \MageSuite\ContentConstructorFrontend\Helper\Category $categoryHelper;
-
-    protected bool $includeNumberOfProductForVirtualCategory;
 
     public function __construct(
         \Magento\Framework\App\CacheInterface $cache,
@@ -37,7 +32,7 @@ class Tree
         $this->includeNumberOfProductForVirtualCategory = $includeNumberOfProductForVirtualCategory;
     }
 
-    protected function buildTree($collection, $currentCategories)
+    protected function buildTree(array $collection, array $currentCategories): array
     {
         $flat = [];
         $categories = [];
@@ -95,7 +90,7 @@ class Tree
         ];
     }
 
-    public function getCategoryTree($configuration = [], $categoryId = null, $currentCategories = [])
+    public function getCategoryTree(array $configuration = [], ?int $categoryId = null, array $currentCategories = []): ?array
     {
         $this->rootCategoryId = $configuration['root_category_id'] ?? 0;
         $onlyIncludedInMenu = $configuration['only_included_in_menu'] ?? 0;
@@ -105,7 +100,7 @@ class Tree
         }
 
         if ($this->rootCategoryId == $categoryId) {
-            return false;
+            return null;
         }
 
         $cacheTag = sprintf(
@@ -146,17 +141,18 @@ class Tree
         return $categoryTree['tree'];
     }
 
-    public function getCategoriesFromCollection($configuration)
+    public function getCategoriesFromCollection(array $configuration): array
     {
         $categoryCollection = $this->prepareCategoriesCollection($configuration);
 
         return $categoryCollection->getItems();
     }
 
-    public function prepareCategoriesCollection($configuration)
+    public function prepareCategoriesCollection(array $configuration): \Magento\Catalog\Model\ResourceModel\Category\Collection
     {
         $categoryCollection = $this->categoryCollectionFactory->create();
 
+        $categoryCollection->addAttributeToSelect('category_custom_url');
         $categoryCollection->addIsActiveFilter();
         $categoryCollection->setOrder('position');
 
@@ -170,17 +166,16 @@ class Tree
         return $categoryCollection;
     }
 
-    protected function preparePath($path)
+    protected function preparePath(string $path): array
     {
         $pathIds = explode('/', $path);
 
         $rootCategoryPosition = array_search($this->rootCategoryId, $pathIds);
-        $pathIds = array_slice($pathIds, $rootCategoryPosition + 1, -1);
 
-        return $pathIds;
+        return array_slice($pathIds, $rootCategoryPosition + 1, -1);
     }
 
-    protected function markCurrentCategories($category, $currentCategories)
+    protected function markCurrentCategories(array $category, array $currentCategories): array
     {
         if (in_array($category['entity_id'], $currentCategories)) {
             $category['current'] = true;
