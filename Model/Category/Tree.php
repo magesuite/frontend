@@ -129,7 +129,7 @@ class Tree
         }
 
         if ($categoryId) {
-            $category = $categoryTree['flat'][$categoryId] ?? false;
+            $category = $categoryTree['flat'][$categoryId] ?? null;
 
             if (is_array($category)) {
                 $category = $this->markCurrentCategories($category, $currentCategories);
