@@ -35,6 +35,10 @@ class Stock extends \Magento\Framework\App\Helper\AbstractHelper
 
     public function getStockStatuses($productIds)
     {
+        if (empty($productIds)) {
+            return [];
+        }
+
         $criteria = $this->stockStatusCriteriaFactory->create();
         $criteria->setProductsFilter([$productIds]);
 
