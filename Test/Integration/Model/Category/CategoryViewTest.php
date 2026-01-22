@@ -1,8 +1,8 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageSuite\Frontend\Test\Integration\Model\Category;
-use Magento\Catalog\Model\Category;
-use Magento\Store\Model\Store;
 
 /**
  * @magentoDbIsolation enabled
@@ -10,10 +10,7 @@ use Magento\Store\Model\Store;
  */
 class CategoryViewTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var \Magento\Catalog\Api\CategoryRepositoryInterface
-     */
-    private $categoryRepository;
+    private ?\Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository;
 
     public function setUp(): void
     {
@@ -27,13 +24,10 @@ class CategoryViewTest extends \PHPUnit\Framework\TestCase
      * @magentoAppIsolation enabled
      * @magentoDataFixture loadCategoriesWithChangedView
      * @dataProvider provideDateToChangeCategoryViewOnDifferentStoreTest
-     * @param integer $categoryId
-     * @param string|null $storeCode
-     * @param string|null $expected
      */
-    public function testChangeCategoryViewOnDifferentStore($categoryId, $storeCode, $expected)
+    public function testChangeCategoryViewOnDifferentStore(int $categoryId, ?string $storeCode, ?string $expected): void
     {
-        /** @var Category $category */
+        /** @var \Magento\Catalog\Model\Category $category */
         $category = $this->categoryRepository->get($categoryId, $storeCode);
 
         $this->assertEquals(
@@ -47,7 +41,7 @@ class CategoryViewTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function provideDateToChangeCategoryViewOnDifferentStoreTest()
+    public static function provideDateToChangeCategoryViewOnDifferentStoreTest(): array
     {
         return [
             [435, null, null],
@@ -58,13 +52,13 @@ class CategoryViewTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public static function loadCategoriesWithChangedView()
+    public static function loadCategoriesWithChangedView(): void
     {
-        require __DIR__.'/../../_files/categories_with_changed_view.php';
+        require __DIR__ . '/../../_files/categories_with_changed_view.php';
     }
 
-    public static function loadCategoriesWithChangedViewRollback()
+    public static function loadCategoriesWithChangedViewRollback(): void
     {
-        require __DIR__.'/../../_files/categories_with_changed_view_rollback.php';
+        require __DIR__ . '/../../_files/categories_with_changed_view_rollback.php';
     }
 }
