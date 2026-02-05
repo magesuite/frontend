@@ -1,23 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageSuite\Frontend\Test\Integration\Plugin\Cms\Block\Widget\Page\Link;
 
 class GetPageUrlByGroupIdentifierTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var \Magento\TestFramework\ObjectManager
-     */
-    protected $objectManager;
+    protected \Magento\TestFramework\ObjectManager $objectManager;
 
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    protected $storeManager;
+    protected \Magento\Store\Model\StoreManagerInterface $storeManager;
 
-    /**
-     * @var \Magento\Cms\Block\Widget\Page\Link
-     */
-    protected $pageLink;
+    protected \Magento\Cms\Block\Widget\Page\Link $pageLink;
 
     public function setUp(): void
     {
@@ -27,21 +20,11 @@ class GetPageUrlByGroupIdentifierTest extends \PHPUnit\Framework\TestCase
 
     }
 
-    public static function loadPagesFixture()
-    {
-        require __DIR__ . '/../../../../../../_files/pages.php';
-    }
-
-    public static function loadPagesFixtureRollback()
-    {
-        require __DIR__ . '/../../../../../../_files/pages_rollback.php';
-    }
-
     /**
      * @magentoAppArea frontend
-     * @magentoDataFixture loadPagesFixture
+     * @magentoDataFixture MageSuite_Frontend::Test/Integration/_files/pages.php
      */
-    public function testCorrectGenerated()
+    public function testCorrectGenerated(): void
     {
         $pageGroupId = 'site1';
         $expectedUri = [

@@ -1,42 +1,26 @@
 <?php
 
-namespace MageSuite\Frontend\Test\Integration\Service\Store;
+declare(strict_types=1);
 
-use Magento\TestFramework\Helper\Bootstrap;
+namespace MageSuite\Frontend\Test\Integration\Service\Store;
 
 class UrlGeneratorTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var \MageSuite\Frontend\Service\Store\UrlGenerator;
-     */
-    private $urlGenerator;
+    protected \MageSuite\Frontend\Service\Store\UrlGenerator $urlGenerator;
 
-    /**
-     * @var \Magento\Store\Model\Store
-     */
-    private $store;
+    protected \Magento\Store\Model\Store $store;
 
     public function setUp(): void
     {
-        $this->urlGenerator = Bootstrap::getObjectManager()->create('MageSuite\Frontend\Service\Store\UrlGenerator');
-        $this->store = Bootstrap::getObjectManager()->create('Magento\Store\Model\Store');
-    }
-
-    public static function loadPagesFixture()
-    {
-        require __DIR__ . '/../../_files/pages.php';
-    }
-
-    public static function loadPagesFixtureRollback()
-    {
-        require __DIR__ . '/../../_files/pages_rollback.php';
+        $this->urlGenerator = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('MageSuite\Frontend\Service\Store\UrlGenerator');
+        $this->store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Store\Model\Store');
     }
 
     /**
      * @magentoAppArea frontend
-     * @magentoDataFixture loadPagesFixture
+     * @magentoDataFixture MageSuite_Frontend::Test/Integration/_files/pages.php
      */
-    public function testCorrectGenerated()
+    public function testCorrectGenerated(): void
     {
         $pageId = 100;
         $storeId = $this->store->load('second')->getId();
@@ -49,9 +33,9 @@ class UrlGeneratorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoAppArea frontend
-     * @magentoDataFixture loadPagesFixture
+     * @magentoDataFixture MageSuite_Frontend::Test/Integration/_files/pages.php
      */
-    public function testEmptyGenerated()
+    public function testEmptyGenerated(): void
     {
         $pageId = 103;
         $storeId = $this->store->load('second')->getId();
@@ -63,9 +47,9 @@ class UrlGeneratorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoAppArea frontend
-     * @magentoDataFixture loadPagesFixture
+     * @magentoDataFixture MageSuite_Frontend::Test/Integration/_files/pages.php
      */
-    public function testHostEqualsToIdentifier()
+    public function testHostEqualsToIdentifier(): void
     {
         $pageId = 104;
         $storeId = $this->store->load('second')->getId();

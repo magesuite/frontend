@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageSuite\Frontend\Test\Integration\Model\Category;
 
 /**
@@ -8,20 +10,9 @@ namespace MageSuite\Frontend\Test\Integration\Model\Category;
  */
 class FeaturedProductsTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var \Magento\TestFramework\ObjectManager
-     */
-    private $objectManager;
-
-    /**
-     * @var \Magento\Catalog\Api\CategoryRepositoryInterface
-     */
-    private $categoryRepository;
-
-    /**
-     * @var \MageSuite\Frontend\Helper\Category
-     */
-    private $categoryHelper;
+    protected \Magento\TestFramework\ObjectManager $objectManager;
+    protected \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository;
+    protected \MageSuite\Frontend\Helper\Category $categoryHelper;
 
     public function setUp(): void
     {
@@ -31,27 +22,13 @@ class FeaturedProductsTest extends \PHPUnit\Framework\TestCase
         $this->categoryHelper = $this->objectManager->get(\MageSuite\Frontend\Helper\Category::class);
     }
 
-    public static function loadCategoriesWithProductsFixture()
-    {
-        require __DIR__.'/../../_files/categories_with_products.php';
-
-        $indexerRegistry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create(\Magento\Framework\Indexer\IndexerRegistry::class);
-        $indexerRegistry->get(\Magento\CatalogSearch\Model\Indexer\Fulltext::INDEXER_ID)->reindexAll();
-    }
-
-    public static function loadCategoriesWithProductsFixtureRollback()
-    {
-        require __DIR__.'/../../_files/categories_with_products_rollback.php';
-    }
-
     /**
      * @magentoAppArea frontend
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
-     * @magentoDataFixture loadCategoriesWithProductsFixture
+     * @magentoDataFixture MageSuite_Frontend::Test/Integration/_files/categories_with_products.php
      */
-    public function testItReturnsCorrectCategoryData()
+    public function testItReturnsCorrectCategoryData(): void
     {
         $categoryId = 334;
 
@@ -61,13 +38,13 @@ class FeaturedProductsTest extends \PHPUnit\Framework\TestCase
         $this->itReturnsFeaturedProducts($category);
     }
 
-    private function itReturnsCategoryData($category)
+    protected function itReturnsCategoryData(\Magento\Catalog\Api\Data\CategoryInterface $category): void
     {
         $this->assertEquals('{"555":"","556":"","557":"","558":""}', $category->getFeaturedProducts());
         $this->assertEquals('Featured Products Header', $category->getFeaturedProductsHeader());
     }
 
-    public function itReturnsFeaturedProducts($category)
+    protected function itReturnsFeaturedProducts(\Magento\Catalog\Api\Data\CategoryInterface $category): void
     {
         $featuredProducts = $this->categoryHelper->getFeaturedProducts($category);
 

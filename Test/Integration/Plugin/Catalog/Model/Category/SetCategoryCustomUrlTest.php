@@ -1,8 +1,8 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageSuite\Frontend\Test\Integration\Plugin\Catalog\Model\Category;
-use Magento\Catalog\Model\Category;
-use Magento\Store\Model\Store;
 
 /**
  * @magentoDbIsolation enabled
@@ -10,10 +10,7 @@ use Magento\Store\Model\Store;
  */
 class SetCategoryCustomUrlTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var \Magento\Catalog\Api\CategoryRepositoryInterface
-     */
-    private $categoryRepository;
+    protected \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository;
 
     public function setUp(): void
     {
@@ -25,11 +22,11 @@ class SetCategoryCustomUrlTest extends \PHPUnit\Framework\TestCase
      * @magentoAppArea frontend
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
-     * @magentoDataFixture loadCategories
-     * @magentoDataFixture loadProducts
-     * @magentoDataFixture loadPages
+     * @magentoDataFixture MageSuite_Frontend::Test/Integration/_files/categories.php
+     * @magentoDataFixture MageSuite_Frontend::Test/Integration/_files/products.php
+     * @magentoDataFixture MageSuite_Frontend::Test/Integration/_files/pages.php
      */
-    public function testCategoryCustomUrl()
+    public function testCategoryCustomUrl(): void
     {
         $expectedResults = [
             '338' => 'http://localhost/index.php/contact/',
@@ -44,39 +41,5 @@ class SetCategoryCustomUrlTest extends \PHPUnit\Framework\TestCase
 
             $this->assertEquals($expectedResult, $category->getUrl());
         }
-    }
-
-    public static function loadCategories()
-    {
-        require __DIR__.'/../../../../_files/categories.php';
-
-        $indexerRegistry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create(\Magento\Framework\Indexer\IndexerRegistry::class);
-        $indexerRegistry->get(\Magento\CatalogSearch\Model\Indexer\Fulltext::INDEXER_ID)->reindexAll();
-    }
-
-    public static function loadCategoriesRollback()
-    {
-        require __DIR__.'/../../../../_files/categories_rollback.php';
-    }
-
-    public static function loadPages()
-    {
-        require __DIR__.'/../../../../_files/pages.php';
-    }
-
-    public static function loadPagesRollback()
-    {
-        require __DIR__ . '/../../../../_files/pages_rollback.php';
-    }
-
-    public static function loadProducts()
-    {
-        require __DIR__ . '/../../../../_files/products.php';
-    }
-
-    public static function loadProductsRollback()
-    {
-        require __DIR__ . '/../../../../_files/products_rollback.php';
     }
 }

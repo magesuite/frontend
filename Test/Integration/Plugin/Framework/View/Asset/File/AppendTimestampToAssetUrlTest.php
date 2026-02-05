@@ -56,7 +56,8 @@ class AppendTimestampToAssetUrlTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public static function cases() {
+    public static function cases(): array
+    {
         return [
             'js_file_with_timestamp' => [
                 1634822082,

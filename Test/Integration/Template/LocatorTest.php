@@ -31,7 +31,7 @@ class LocatorTest extends \PHPUnit\Framework\TestCase
         $this->$assertContains($expectedPath, $this->locator->locate($locatorPath));
     }
 
-    public static function getPaths()
+    public static function getPaths(): array
     {
         return [
             ['Magento_Theme::template.phtml', 'view/frontend/templates/template.phtml']

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageSuite\Frontend\Test\Integration\Helper;
 
 /**
@@ -8,21 +10,9 @@ namespace MageSuite\Frontend\Test\Integration\Helper;
  */
 class PageTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var \Magento\TestFramework\ObjectManager
-     */
-    private $objectManager;
-
-    /**
-     * @var \MageSuite\Frontend\Helper\Page
-     */
-    private $pageHelper;
-
-    /**
-     * @var \Magento\Store\Model\Store
-     */
-    private $store;
-
+    protected \Magento\TestFramework\ObjectManager $objectManager;
+    protected \MageSuite\Frontend\Helper\Page $pageHelper;
+    protected \Magento\Store\Model\Store $store;
 
     public function setUp(): void
     {
@@ -33,23 +23,13 @@ class PageTest extends \PHPUnit\Framework\TestCase
         $this->pageHelper = $this->objectManager->get(\MageSuite\Frontend\Helper\Page::class);
     }
 
-    public static function loadPagesFixture()
-    {
-        require __DIR__ . '/_files/pages.php';
-    }
-
-    public static function loadPagesFixtureRollback()
-    {
-        require __DIR__ . '/_files/pages_rollback.php';
-    }
-
     /**
      * @magentoAppArea frontend
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
-     * @magentoDataFixture loadPagesFixture
+     * @magentoDataFixture MageSuite_Frontend::Test/Integration/Helper/_files/pages.php
      */
-    public function testItReturnCorrectUrl()
+    public function testItReturnCorrectUrl(): void
     {
         $expectedResults = [
             'site1' => 'http://localhost/index.php/site1-default',
@@ -62,5 +42,4 @@ class PageTest extends \PHPUnit\Framework\TestCase
             $this->assertEquals($expectedResult, $result);
         }
     }
-
 }
