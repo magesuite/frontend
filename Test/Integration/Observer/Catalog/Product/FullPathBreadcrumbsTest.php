@@ -76,7 +76,8 @@ class FullPathBreadcrumbsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedCategoryId, $currentCategory->getId());
     }
 
-    public static function getProductsSkusAndExpectedCategoryIds() {
+    public static function getProductsSkusAndExpectedCategoryIds(): array
+    {
         return [
             ['simple', 3],
             ['12345', 4],

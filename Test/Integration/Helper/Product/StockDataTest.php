@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageSuite\Frontend\Test\Integration\Helper\Product;
 
 /**
@@ -8,20 +10,11 @@ namespace MageSuite\Frontend\Test\Integration\Helper\Product;
  */
 class StockDataTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var \Magento\TestFramework\ObjectManager
-     */
-    private $objectManager;
+    protected \Magento\TestFramework\ObjectManager $objectManager;
 
-    /**
-     * @var \MageSuite\Frontend\Helper\Product\StockData
-     */
-    private $stockDataHelper;
+    protected \MageSuite\Frontend\Helper\Product\StockData $stockDataHelper;
 
-    /**
-     * @var \MageSuite\ContentConstructorFrontend\DataProviders\ProductCarouselDataProvider
-     */
-    private $dataProvider;
+    protected \MageSuite\ContentConstructorFrontend\DataProviders\ProductCarouselDataProvider $dataProvider;
 
     public function setUp(): void
     {
@@ -31,24 +24,14 @@ class StockDataTest extends \PHPUnit\Framework\TestCase
         $this->dataProvider = $this->objectManager->get(\MageSuite\ContentConstructorFrontend\DataProviders\ProductCarouselDataProvider::class);
     }
 
-    public static function loadProductsFixture()
-    {
-        require __DIR__ . '/../../_files/products.php';
-    }
-
-    public static function loadProductsFixtureRollback()
-    {
-        require __DIR__ . '/../../_files/products_rollback.php';
-    }
-
     /**
      * @magentoAppArea frontend
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
-     * @magentoDataFixture loadProductsFixture
+     * @magentoDataFixture MageSuite_Frontend::Test/Integration/_files/products.php
      * @magentoConfigFixture current_store cataloginventory/options/show_out_of_stock 1
      */
-    public function testItReturnsCorrectProductsData()
+    public function testItReturnsCorrectProductsData(): void
     {
         $products = $this->dataProvider->getProducts(['category_id' => 333]);
 

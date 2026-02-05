@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageSuite\Frontend\Test\Integration\Model\Category;
 
 /**
@@ -8,20 +10,11 @@ namespace MageSuite\Frontend\Test\Integration\Model\Category;
  */
 class TreeTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var \Magento\TestFramework\ObjectManager
-     */
-    private $objectManager;
+    protected \Magento\TestFramework\ObjectManager $objectManager;
 
-    /**
-     * @var \Magento\Catalog\Api\CategoryRepositoryInterface
-     */
-    private $categoryRepository;
+    protected \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository;
 
-    /**
-     * @var \MageSuite\Frontend\Model\Category\Tree
-     */
-    private $categoryTree;
+    protected \MageSuite\Frontend\Model\Category\Tree $categoryTree;
 
     public function setUp(): void
     {
@@ -33,31 +26,20 @@ class TreeTest extends \PHPUnit\Framework\TestCase
         $this->categoryRepository = $this->objectManager->create(\Magento\Catalog\Api\CategoryRepositoryInterface::class);
     }
 
-    public static function loadCategoriesFixture()
-    {
-        require __DIR__.'/../../_files/categories.php';
-    }
-
-    public static function loadCategoriesFixtureRollback()
-    {
-        require __DIR__.'/../../_files/categories_rollback.php';
-    }
-
     /**
      * @magentoAppArea frontend
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
-     * @magentoDataFixture loadCategoriesFixture
+     * @magentoDataFixture MageSuite_Frontend::Test/Integration/_files/categories.php
      */
-    public function testItReturnsCategoryTree()
+    public function testItReturnsCategoryTree(): void
     {
         $this->itReturnCategoryTree();
         $this->itReturnFilteredCategoryTree();
         $this->itReturnCategoryTreeWithDifferentRoot();
-
     }
 
-    private function itReturnCategoryTree()
+    protected function itReturnCategoryTree(): void
     {
         $categoryId = 333;
         $categoryTree = $this->categoryTree->getCategoryTree();
@@ -67,7 +49,7 @@ class TreeTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(0, $categoryTree[$categoryId]['parents']);
     }
 
-    private function itReturnFilteredCategoryTree()
+    protected function itReturnFilteredCategoryTree(): void
     {
         $categoryId = 333;
 
@@ -82,7 +64,7 @@ class TreeTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(0, $categoryTree[$categoryId]['parents']);
     }
 
-    private function itReturnCategoryTreeWithDifferentRoot()
+    protected function itReturnCategoryTreeWithDifferentRoot(): void
     {
         $categoryId = 334;
 

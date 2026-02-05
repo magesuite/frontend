@@ -1,8 +1,8 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageSuite\Frontend\Test\Integration\Model\Category;
-use Magento\Catalog\Model\Category;
-use Magento\Store\Model\Store;
 
 /**
  * @magentoDbIsolation enabled
@@ -10,10 +10,7 @@ use Magento\Store\Model\Store;
  */
 class CategoryViewTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var \Magento\Catalog\Api\CategoryRepositoryInterface
-     */
-    private $categoryRepository;
+    protected \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository;
 
     public function setUp(): void
     {
@@ -25,15 +22,12 @@ class CategoryViewTest extends \PHPUnit\Framework\TestCase
      * @magentoAppArea frontend
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
-     * @magentoDataFixture loadCategoriesWithChangedView
+     * @magentoDataFixture MageSuite_Frontend::Test/Integration/_files/categories_with_changed_view.php
      * @dataProvider provideDateToChangeCategoryViewOnDifferentStoreTest
-     * @param integer $categoryId
-     * @param string|null $storeCode
-     * @param string|null $expected
      */
-    public function testChangeCategoryViewOnDifferentStore($categoryId, $storeCode, $expected)
+    public function testChangeCategoryViewOnDifferentStore(int $categoryId, ?string $storeCode, ?string $expected): void
     {
-        /** @var Category $category */
+        /** @var \Magento\Catalog\Model\Category $category */
         $category = $this->categoryRepository->get($categoryId, $storeCode);
 
         $this->assertEquals(
@@ -44,10 +38,7 @@ class CategoryViewTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @return array
-     */
-    public function provideDateToChangeCategoryViewOnDifferentStoreTest()
+    public function provideDateToChangeCategoryViewOnDifferentStoreTest(): array
     {
         return [
             [435, null, null],
@@ -56,15 +47,5 @@ class CategoryViewTest extends \PHPUnit\Framework\TestCase
             [437, 'default', 'list'],
             [437, 'admin', 'grid']
         ];
-    }
-
-    public static function loadCategoriesWithChangedView()
-    {
-        require __DIR__.'/../../_files/categories_with_changed_view.php';
-    }
-
-    public static function loadCategoriesWithChangedViewRollback()
-    {
-        require __DIR__.'/../../_files/categories_with_changed_view_rollback.php';
     }
 }

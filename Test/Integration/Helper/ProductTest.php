@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageSuite\Frontend\Test\Integration\Helper;
 
 /**
@@ -8,25 +10,13 @@ namespace MageSuite\Frontend\Test\Integration\Helper;
  */
 class ProductTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var \Magento\TestFramework\ObjectManager
-     */
-    private $objectManager;
+    protected \Magento\TestFramework\ObjectManager $objectManager;
 
-    /**
-     * @var \Magento\Catalog\Api\ProductRepositoryInterface
-     */
-    private $productRepository;
+    protected \Magento\Catalog\Api\ProductRepositoryInterface $productRepository;
 
-    /**
-     * @var \Magento\Framework\Registry
-     */
-    private $registry;
+    protected \Magento\Framework\Registry $registry;
 
-    /**
-     * @var \MageSuite\Frontend\Helper\Product
-     */
-    private $productHelper;
+    protected \MageSuite\Frontend\Helper\Product $productHelper;
 
     public function setUp(): void
     {
@@ -36,22 +26,12 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->productHelper = $this->objectManager->get(\MageSuite\Frontend\Helper\Product::class);
     }
 
-    public static function loadProductWithReviewsFixture()
-    {
-        require __DIR__ . '/../_files/product_with_reviews.php';
-    }
-
-    public static function loadProductWithReviewsFixtureRollback()
-    {
-        require __DIR__ . '/../_files/product_with_reviews_rollback.php';
-    }
-
     /**
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
-     * @magentoDataFixture loadProductWithReviewsFixture
+     * @magentoDataFixture MageSuite_Frontend::Test/Integration/_files/product_with_reviews.php
      */
-    public function testItReturnsReviewSummary()
+    public function testItReturnsReviewSummary(): void
     {
         $productId = 555;
         $product = $this->productRepository->getById($productId);
@@ -84,9 +64,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * @magentoAppArea frontend
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
-     * @magentoDataFixture loadProductWithReviewsFixture
+     * @magentoDataFixture MageSuite_Frontend::Test/Integration/_files/product_with_reviews.php
      */
-    public function testItReturnsEmptyReviewSummary()
+    public function testItReturnsEmptyReviewSummary(): void
     {
         $productId = 556;
         $product = $this->productRepository->getById($productId);
@@ -107,9 +87,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * @magentoAppArea frontend
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
-     * @magentoDataFixture loadProductWithReviewsFixture
+     * @magentoDataFixture MageSuite_Frontend::Test/Integration/_files/product_with_reviews.php
      */
-    public function testItReturnsCorrectAddToCartUrl()
+    public function testItReturnsCorrectAddToCartUrl(): void
     {
         $product = $this->productRepository->get('first_product');
 

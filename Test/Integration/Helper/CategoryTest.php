@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageSuite\Frontend\Test\Integration\Helper;
 
 /**
@@ -8,20 +10,9 @@ namespace MageSuite\Frontend\Test\Integration\Helper;
  */
 class CategoryTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var \Magento\TestFramework\ObjectManager
-     */
-    protected $objectManager;
-
-    /**
-     * @var \Magento\Catalog\Api\CategoryRepositoryInterface
-     */
-    protected $categoryRepository;
-
-    /**
-     * @var \MageSuite\Frontend\Helper\Category
-     */
-    protected $categoryHelper;
+    protected \Magento\TestFramework\ObjectManager $objectManager;
+    protected \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository;
+    protected \MageSuite\Frontend\Helper\Category $categoryHelper;
 
     public function setUp(): void
     {
@@ -32,23 +23,13 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $this->categoryRepository = $this->objectManager->create(\Magento\Catalog\Api\CategoryRepositoryInterface::class);
     }
 
-    public static function loadCategoriesFixture()
-    {
-        require __DIR__ . '/../_files/categories.php';
-    }
-
-    public static function loadCategoriesFixtureRollback()
-    {
-        require __DIR__ . '/../_files/categories_rollback.php';
-    }
-
     /**
      * @magentoAppArea frontend
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
-     * @magentoDataFixture loadCategoriesFixture
+     * @magentoDataFixture MageSuite_Frontend::Test/Integration/_files/categories.php
      */
-    public function testItReturnsCategoryNode()
+    public function testItReturnsCategoryNode(): void
     {
         $categoryId = 335;
         $categoryNode = $this->getCategoryNode($categoryId);
@@ -64,21 +45,20 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('Main category', $categoryNode['children'][$categoryId]['parents'][333]['name']);
     }
 
-    public function getCategoryNode($categoryId, $returnCurrent = false)
+    protected function getCategoryNode(int $categoryId, bool $returnCurrent = false): array
     {
         $category = $this->categoryRepository->get($categoryId);
-        $categoryTree = $this->categoryHelper->getCategoryNode($category, $returnCurrent);
 
-        return $categoryTree;
+        return $this->categoryHelper->getCategoryNode($category, $returnCurrent);
     }
 
     /**
      * @magentoAppArea frontend
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
-     * @magentoDataFixture loadCategoriesFixture
+     * @magentoDataFixture MageSuite_Frontend::Test/Integration/_files/categories.php
      */
-    public function testItReturnsCurrentCategory()
+    public function testItReturnsCurrentCategory(): void
     {
         $categoryId = 335;
         $categoryNode = $this->getCategoryNode($categoryId, true);
@@ -92,9 +72,9 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
      * @magentoAppArea frontend
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
-     * @magentoDataFixture loadCategoriesFixture
+     * @magentoDataFixture MageSuite_Frontend::Test/Integration/_files/categories.php
      */
-    public function testItReturnsImageTeaserAttributes()
+    public function testItReturnsImageTeaserAttributes(): void
     {
         $categoryId = 335;
         $category = $this->categoryRepository->get($categoryId);
