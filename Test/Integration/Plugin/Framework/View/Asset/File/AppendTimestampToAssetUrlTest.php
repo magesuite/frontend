@@ -1,25 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageSuite\Frontend\Test\Integration\Plugin\Framework\View\Asset\File;
 
 class AppendTimestampToAssetUrlTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var \Magento\TestFramework\ObjectManager
-     */
-    protected $objectManager;
+    protected ?\Magento\TestFramework\ObjectManager $objectManager;
+    protected ?\Magento\Framework\App\Config\Storage\WriterInterface $configWriter;
+    protected ?\Magento\Framework\View\Asset\Repository $assetRepository;
 
-    /**
-     * @var \Magento\Framework\App\Config\Storage\WriterInterface|mixed
-     */
-    protected $configWriter;
-
-    /**
-     * @var \Magento\Framework\View\Asset\Repository|mixed
-     */
-    protected $assetRepository;
-
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\ObjectManager::getInstance();
         $this->configWriter = $this->objectManager->create(\Magento\Framework\App\Config\Storage\WriterInterface::class);

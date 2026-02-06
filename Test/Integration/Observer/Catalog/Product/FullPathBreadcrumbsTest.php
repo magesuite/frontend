@@ -1,33 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageSuite\Frontend\Test\Integration\Observer\Catalog\Product;
 
 class FullPathBreadcrumbsTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var \Magento\TestFramework\ObjectManager
-     */
-    protected $objectManager;
-
-    /**
-     * @var \Magento\Catalog\Api\ProductRepositoryInterface
-     */
-    protected $productRepository;
-
-    /**
-     * @var \MageSuite\Frontend\Service\Breadcrumb\BreadcrumbCategoryFinderInterface
-     */
-    protected $categoryFinder;
-
-    /**
-     * @var \Magento\Framework\EntityManager\EventManager
-     */
-    protected $eventManager;
-
-    /**
-     * @var \Magento\Framework\Registry
-     */
-    protected $registry;
+    protected ?\Magento\TestFramework\ObjectManager $objectManager;
+    protected ?\Magento\Catalog\Api\ProductRepositoryInterface $productRepository;
+    protected ?\MageSuite\Frontend\Service\Breadcrumb\BreadcrumbCategoryFinderInterface $categoryFinder;
+    protected ?\Magento\Framework\EntityManager\EventManager $eventManager;
+    protected ?\Magento\Framework\Registry $registry;
 
     public function setUp(): void
     {
@@ -45,8 +28,9 @@ class FullPathBreadcrumbsTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Catalog/_files/categories.php
      * @dataProvider getProductsSkusAndExpectedCategoryIds
      */
-    public function testCurrentCategoryIsFilledWithFirstFoundCategory($sku, $expectedCategoryId) {
-        if(get_class($this->categoryFinder) != \MageSuite\Frontend\Service\Breadcrumb\FirstCategoryFinder::class) {
+    public function testCurrentCategoryIsFilledWithFirstFoundCategory(string $sku, int $expectedCategoryId): void
+    {
+        if (get_class($this->categoryFinder) != \MageSuite\Frontend\Service\Breadcrumb\FirstCategoryFinder::class) {
             $this->markTestSkipped();
         }
 

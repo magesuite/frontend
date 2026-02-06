@@ -38,7 +38,7 @@ class CategoryViewTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function provideDateToChangeCategoryViewOnDifferentStoreTest(): array
+    public static function provideDateToChangeCategoryViewOnDifferentStoreTest(): array
     {
         return [
             [435, null, null],
