@@ -10,11 +10,9 @@ namespace MageSuite\Frontend\Test\Integration\Helper\Product;
  */
 class StockDataTest extends \PHPUnit\Framework\TestCase
 {
-    protected \Magento\TestFramework\ObjectManager $objectManager;
-
-    protected \MageSuite\Frontend\Helper\Product\StockData $stockDataHelper;
-
-    protected \MageSuite\ContentConstructorFrontend\DataProviders\ProductCarouselDataProvider $dataProvider;
+    protected ?\Magento\TestFramework\ObjectManager $objectManager;
+    protected ?\MageSuite\Frontend\Helper\Product\StockData $stockDataHelper;
+    protected ?\MageSuite\ContentConstructorFrontend\DataProviders\ProductCarouselDataProvider $dataProvider;
 
     public function setUp(): void
     {

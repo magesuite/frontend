@@ -1,23 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageSuite\Frontend\Test\Integration\Setup;
 
 class AttributeTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var \Magento\TestFramework\ObjectManager
-     */
-    private $objectManager;
-
-    /**
-     * @var \Magento\Eav\Setup\EavSetupFactory
-     */
-    private $eavSetupFactory;
-
-    /**
-     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
-     */
-    private $eavSetup;
+    protected ?\Magento\TestFramework\ObjectManager $objectManager;
+    protected ?\Magento\Eav\Setup\EavSetupFactory $eavSetupFactory;
+    protected ?\Magento\Framework\Setup\ModuleDataSetupInterface $eavSetup;
 
     public function setUp(): void
     {

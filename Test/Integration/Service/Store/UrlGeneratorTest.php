@@ -6,9 +6,8 @@ namespace MageSuite\Frontend\Test\Integration\Service\Store;
 
 class UrlGeneratorTest extends \PHPUnit\Framework\TestCase
 {
-    protected \MageSuite\Frontend\Service\Store\UrlGenerator $urlGenerator;
-
-    protected \Magento\Store\Model\Store $store;
+    protected ?\MageSuite\Frontend\Service\Store\UrlGenerator $urlGenerator;
+    protected ?\Magento\Store\Model\Store $store;
 
     public function setUp(): void
     {

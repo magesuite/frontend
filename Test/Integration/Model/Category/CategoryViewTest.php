@@ -10,7 +10,7 @@ namespace MageSuite\Frontend\Test\Integration\Model\Category;
  */
 class CategoryViewTest extends \PHPUnit\Framework\TestCase
 {
-    protected \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository;
+    protected ?\Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository;
 
     public function setUp(): void
     {

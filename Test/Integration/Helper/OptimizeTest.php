@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageSuite\Frontend\Test\Integration\Helper;
 
 /**
@@ -8,15 +10,8 @@ namespace MageSuite\Frontend\Test\Integration\Helper;
  */
 class OptimizeTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var \Magento\TestFramework\ObjectManager
-     */
-    private $objectManager;
-
-    /**
-     * @var \MageSuite\Frontend\Helper\Optimize
-     */
-    private $optimizeHelper;
+    protected ?\Magento\TestFramework\ObjectManager $objectManager;
+    protected ?\MageSuite\Frontend\Helper\Optimize $optimizeHelper;
 
     public function setUp(): void
     {

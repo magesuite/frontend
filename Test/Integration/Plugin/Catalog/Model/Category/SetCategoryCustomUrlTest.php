@@ -10,7 +10,7 @@ namespace MageSuite\Frontend\Test\Integration\Plugin\Catalog\Model\Category;
  */
 class SetCategoryCustomUrlTest extends \PHPUnit\Framework\TestCase
 {
-    protected \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository;
+    protected ?\Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository;
 
     public function setUp(): void
     {

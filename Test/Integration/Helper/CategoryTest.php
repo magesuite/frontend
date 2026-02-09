@@ -10,9 +10,9 @@ namespace MageSuite\Frontend\Test\Integration\Helper;
  */
 class CategoryTest extends \PHPUnit\Framework\TestCase
 {
-    protected \Magento\TestFramework\ObjectManager $objectManager;
-    protected \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository;
-    protected \MageSuite\Frontend\Helper\Category $categoryHelper;
+    protected ?\Magento\TestFramework\ObjectManager $objectManager;
+    protected ?\Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository;
+    protected ?\MageSuite\Frontend\Helper\Category $categoryHelper;
 
     public function setUp(): void
     {
