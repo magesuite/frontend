@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace MageSuite\Frontend\Test\Integration\Helper;
 
 /**
@@ -10,25 +13,10 @@ class OrderPrintTest extends \Magento\TestFramework\TestCase\AbstractController
     const ORDER_VIEW_URL = 'sales/order/view/order_id/%s';
     const SHIPMENT_VIEW_URL = 'sales/order/shipment/order_id/%s';
 
-    /**
-     * @var \Magento\Customer\Model\Customer
-     */
-    protected $customer;
-
-    /**
-     * @var \Magento\Customer\Model\Session
-     */
-    protected $customerSession;
-
-    /**
-     * @var \Magento\Sales\Api\Data\OrderInterface
-     */
-    protected $order;
-
-    /**
-     * @var \Magento\Framework\Registry
-     */
-    protected $registry;
+    protected ?\Magento\Customer\Model\Customer $customer;
+    protected ?\Magento\Customer\Model\Session $customerSession;
+    protected ?\Magento\Sales\Api\Data\OrderInterface $order;
+    protected ?\Magento\Framework\Registry $registry;
 
     public function setUp(): void
     {

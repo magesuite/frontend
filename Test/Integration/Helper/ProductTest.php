@@ -10,13 +10,10 @@ namespace MageSuite\Frontend\Test\Integration\Helper;
  */
 class ProductTest extends \PHPUnit\Framework\TestCase
 {
-    protected \Magento\TestFramework\ObjectManager $objectManager;
-
-    protected \Magento\Catalog\Api\ProductRepositoryInterface $productRepository;
-
-    protected \Magento\Framework\Registry $registry;
-
-    protected \MageSuite\Frontend\Helper\Product $productHelper;
+    protected ?\Magento\TestFramework\ObjectManager $objectManager;
+    protected ?\Magento\Catalog\Api\ProductRepositoryInterface $productRepository;
+    protected ?\Magento\Framework\Registry $registry;
+    protected ?\MageSuite\Frontend\Helper\Product $productHelper;
 
     public function setUp(): void
     {

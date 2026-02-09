@@ -6,11 +6,9 @@ namespace MageSuite\Frontend\Test\Integration\Plugin\Cms\Block\Widget\Page\Link;
 
 class GetPageUrlByGroupIdentifierTest extends \PHPUnit\Framework\TestCase
 {
-    protected \Magento\TestFramework\ObjectManager $objectManager;
-
-    protected \Magento\Store\Model\StoreManagerInterface $storeManager;
-
-    protected \Magento\Cms\Block\Widget\Page\Link $pageLink;
+    protected ?\Magento\TestFramework\ObjectManager $objectManager;
+    protected ?\Magento\Store\Model\StoreManagerInterface $storeManager;
+    protected ?\Magento\Cms\Block\Widget\Page\Link $pageLink;
 
     public function setUp(): void
     {

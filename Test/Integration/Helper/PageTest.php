@@ -10,9 +10,9 @@ namespace MageSuite\Frontend\Test\Integration\Helper;
  */
 class PageTest extends \PHPUnit\Framework\TestCase
 {
-    protected \Magento\TestFramework\ObjectManager $objectManager;
-    protected \MageSuite\Frontend\Helper\Page $pageHelper;
-    protected \Magento\Store\Model\Store $store;
+    protected ?\Magento\TestFramework\ObjectManager $objectManager;
+    protected ?\MageSuite\Frontend\Helper\Page $pageHelper;
+    protected ?\Magento\Store\Model\Store $store;
 
     public function setUp(): void
     {

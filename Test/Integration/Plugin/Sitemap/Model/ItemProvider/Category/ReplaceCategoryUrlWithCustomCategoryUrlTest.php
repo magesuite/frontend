@@ -6,8 +6,8 @@ namespace MageSuite\Frontend\Test\Integration\Plugin\Sitemap\Model\ItemProvider\
 
 class ReplaceCategoryUrlWithCustomCategoryUrlTest extends \PHPUnit\Framework\TestCase
 {
-    protected \Magento\Sitemap\Model\ItemProvider\Category $categorySitemapItemProvider;
-    protected \Magento\Store\Model\StoreManagerInterface $storeManager;
+    protected ?\Magento\Sitemap\Model\ItemProvider\Category $categorySitemapItemProvider;
+    protected ?\Magento\Store\Model\StoreManagerInterface $storeManager;
 
     protected function setUp(): void
     {

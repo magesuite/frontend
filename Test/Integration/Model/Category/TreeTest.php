@@ -10,11 +10,9 @@ namespace MageSuite\Frontend\Test\Integration\Model\Category;
  */
 class TreeTest extends \PHPUnit\Framework\TestCase
 {
-    protected \Magento\TestFramework\ObjectManager $objectManager;
-
-    protected \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository;
-
-    protected \MageSuite\Frontend\Model\Category\Tree $categoryTree;
+    protected ?\Magento\TestFramework\ObjectManager $objectManager;
+    protected ?\Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository;
+    protected ?\MageSuite\Frontend\Model\Category\Tree $categoryTree;
 
     public function setUp(): void
     {
