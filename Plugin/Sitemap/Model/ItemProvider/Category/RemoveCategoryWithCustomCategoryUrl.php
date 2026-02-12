@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MageSuite\Frontend\Plugin\Sitemap\Model\ItemProvider\Category;
 
-class ReplaceCategoryUrlWithCustomCategoryUrl
+class RemoveCategoryWithCustomCategoryUrl
 {
     public function __construct(
         protected \MageSuite\Frontend\Model\ResourceModel\Category\Collection $categoryCollection,
@@ -24,18 +24,7 @@ class ReplaceCategoryUrlWithCustomCategoryUrl
                 continue;
             }
 
-            if (str_starts_with($customUrl, 'http')) {
-                unset($result[$categoryId]);
-                continue;
-            }
-
-            $result[$categoryId] = $this->itemFactory->create([
-                'url' => ltrim($customUrl, '/'),
-                'updatedAt' => $result[$categoryId]->getUpdatedAt(),
-                'images' => $result[$categoryId]->getImages(),
-                'priority' => $result[$categoryId]->getPriority(),
-                'changeFrequency' => $result[$categoryId]->getChangeFrequency()
-            ]);
+            unset($result[$categoryId]);
         }
 
         return $result;
