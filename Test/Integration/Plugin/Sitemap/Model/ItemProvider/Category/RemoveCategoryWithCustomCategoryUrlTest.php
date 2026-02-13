@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MageSuite\Frontend\Test\Integration\Plugin\Sitemap\Model\ItemProvider\Category;
 
-class ReplaceCategoryUrlWithCustomCategoryUrlTest extends \PHPUnit\Framework\TestCase
+class RemoveCategoryWithCustomCategoryUrlTest extends \PHPUnit\Framework\TestCase
 {
     protected ?\Magento\Sitemap\Model\ItemProvider\Category $categorySitemapItemProvider;
     protected ?\Magento\Store\Model\StoreManagerInterface $storeManager;
@@ -21,11 +21,14 @@ class ReplaceCategoryUrlWithCustomCategoryUrlTest extends \PHPUnit\Framework\Tes
      * @magentoAppIsolation enabled
      * @magentoDataFixture MageSuite_Frontend::Test/Integration/_files/categories.php
      */
-    public function testItReplacesCategoryUrlWithCustomCategoryUrl(): void
+    public function testItRemoveCategoryUrlWithCustomCategoryUrl(): void
     {
         $storeId = (int)$this->storeManager->getStore()->getId();
         $items = $this->categorySitemapItemProvider->getItems($storeId);
-        $this->assertEquals('main-category/third-subcategory/subcategory-of-third-subcategory.html', $items[337]->getUrl());
-        $this->assertEquals('contact', $items[338]->getUrl());
+        $categoryIds = [338, 339, 340];
+
+        foreach($categoryIds as $categoryId){
+            $this->assertArrayNotHasKey($categoryId, $items);
+        }
     }
 }
