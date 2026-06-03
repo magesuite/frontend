@@ -20,7 +20,7 @@ class Order extends \Magento\Framework\App\Helper\AbstractHelper
 
     public function canPrintOrder()
     {
-        return (boolean)$this->scopeConfig->getValue('sales/general/show_print_button', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return (bool)$this->scopeConfig->getValue('sales/general/show_print_button', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 
 }
