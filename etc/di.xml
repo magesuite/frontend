@@ -71,6 +71,7 @@
     <type name="Magento\Framework\HTTP\PhpEnvironment\RemoteAddress">
         <arguments>
             <argument name="alternativeHeaders" xsi:type="array">
+                <item name="cf-connecting-ip" xsi:type="string">HTTP_CF_CONNECTING_IP</item>
                 <item name="x-forwarded-for" xsi:type="string">HTTP_X_FORWARDED_FOR</item>
             </argument>
         </arguments>
