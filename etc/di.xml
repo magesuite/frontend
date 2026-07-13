@@ -157,4 +157,10 @@
     <type name="Magento\Version\Controller\Index\Index">
         <plugin name="redirect_magento_version" type="MageSuite\Frontend\Plugin\Magento\Version\Controller\Index\Index\RedirectMagentoVersion" sortOrder="100"/>
     </type>
+
+    <type name="Magento\Customer\Helper\Session\CurrentCustomer">
+        <arguments>
+            <argument name="view" xsi:type="object">Magento\Framework\App\View\Proxy</argument>
+        </arguments>
+    </type>
 </config>
