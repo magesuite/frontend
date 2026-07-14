@@ -45,12 +45,12 @@ class MinimalFinalPriceCalculatorTest extends \PHPUnit\Framework\TestCase
     public function setUp(): void
     {
         $this->finalPrice = $this->getMockBuilder(FinalPrice::class)->disableOriginalConstructor()->getMock();
-        $this->priceInfo = $this->getMockForAbstractClass(PriceInfoInterface::class);
-        $this->saleable = $this->getMockForAbstractClass(SaleableInterface::class);
+        $this->priceInfo = $this->createMock(PriceInfoInterface::class);
+        $this->saleable = $this->createMock(SaleableInterface::class);
 
         $this->objectManager = new ObjectManager($this);
 
-        $this->calculator = $this->getMockForAbstractClass(CalculatorInterface::class);
+        $this->calculator = $this->createMock(CalculatorInterface::class);
         $this->minimalFinalPriceCalculator = $this->objectManager->getObject(
             MinimalFinalPriceCalculator::class,
             ['calculator' => $this->calculator]
@@ -61,7 +61,7 @@ class MinimalFinalPriceCalculatorTest extends \PHPUnit\Framework\TestCase
     {
         $minPrice = 5;
 
-        $minAmount = $this->getMockForAbstractClass(AmountInterface::class);
+        $minAmount = $this->createMock(AmountInterface::class);
         $minAmount->expects($this->once())->method('getValue')->willReturn($minPrice);
         $this->finalPrice->expects($this->once())->method('getMinimalPrice')->willReturn($minAmount);
         $this->priceInfo->expects($this->once())->method('getPrice')->with(FinalPrice::PRICE_CODE)->willReturn($this->finalPrice);
@@ -80,7 +80,7 @@ class MinimalFinalPriceCalculatorTest extends \PHPUnit\Framework\TestCase
     {
         $minPrice = $this->getMinValueAndPrepareMock();
 
-        $amount = $this->getMockForAbstractClass(AmountInterface::class);
+        $amount = $this->createMock(AmountInterface::class);
 
         $this->calculator->expects($this->once())
             ->method('getAmount')

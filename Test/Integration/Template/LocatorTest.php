@@ -17,8 +17,8 @@ class LocatorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoAppArea frontend
-     * @dataProvider getPaths
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getPaths')]
     public function testItReturnsCorrectTemplatePath(string $locatorPath, string $expectedPath): void
     {
         $assertContains = method_exists($this, 'assertStringContainsString') ? 'assertStringContainsString' : 'assertContains';

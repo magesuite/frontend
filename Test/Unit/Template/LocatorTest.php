@@ -112,7 +112,7 @@ class LocatorTest extends \PHPUnit\Framework\TestCase
 
         $this->customizationPathStub
             ->method('getThemeFilesPath')
-            ->will($this->onConsecutiveCalls($customAssetsLocation, $mainAssetsLocation));
+            ->willReturnOnConsecutiveCalls($customAssetsLocation, $mainAssetsLocation);
 
         return $customTheme;
     }

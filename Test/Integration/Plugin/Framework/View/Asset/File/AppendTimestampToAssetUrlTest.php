@@ -20,8 +20,8 @@ class AppendTimestampToAssetUrlTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoAppIsolation enabled
      * @magentoAppArea frontend
-     * @dataProvider cases
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('cases')]
     public function testItGeneratesCorrectUrl($timestamp, $file, $expectedUrl) {
         if($timestamp > 0) {
             $this->configWriter->save(
