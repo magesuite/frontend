@@ -26,8 +26,8 @@ class FullPathBreadcrumbsTest extends \PHPUnit\Framework\TestCase
      * @magentoDbIsolation enabled
      * @magentoAppArea frontend
      * @magentoDataFixture Magento/Catalog/_files/categories.php
-     * @dataProvider getProductsSkusAndExpectedCategoryIds
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getProductsSkusAndExpectedCategoryIds')]
     public function testCurrentCategoryIsFilledWithFirstFoundCategory(string $sku, int $expectedCategoryId): void
     {
         if (get_class($this->categoryFinder) != \MageSuite\Frontend\Service\Breadcrumb\FirstCategoryFinder::class) {

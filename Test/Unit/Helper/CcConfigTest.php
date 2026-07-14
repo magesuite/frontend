@@ -49,9 +49,7 @@ class CcConfigTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @dataProvider expectedScenarios
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('expectedScenarios')]
     public function testItReturnsCorrectColumnConfiguration(string $ccConfig, bool $isFullWidth, string $expectedConfiguration): void
     {
         $this->configDataProviderStub->method('getConfig')->willReturn($ccConfig);

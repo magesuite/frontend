@@ -23,8 +23,8 @@ class CategoryViewTest extends \PHPUnit\Framework\TestCase
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      * @magentoDataFixture MageSuite_Frontend::Test/Integration/_files/categories_with_changed_view.php
-     * @dataProvider provideDateToChangeCategoryViewOnDifferentStoreTest
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideDateToChangeCategoryViewOnDifferentStoreTest')]
     public function testChangeCategoryViewOnDifferentStore(int $categoryId, ?string $storeCode, ?string $expected): void
     {
         /** @var \Magento\Catalog\Model\Category $category */

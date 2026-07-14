@@ -20,9 +20,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->productHelper = $this->objectManager->get(\MageSuite\Frontend\Helper\Product::class);
     }
 
-    /**
-     * @dataProvider getDates
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getDates')]
     public function testItReturnsIsNew($fromDate, $toDate, $date, $expected): void
     {
         $productStub = $this->prepareProductForIsNew($fromDate, $toDate);
