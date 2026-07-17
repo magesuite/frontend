@@ -1,39 +1,37 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageSuite\Frontend\Service\Breadcrumb;
 
 class FirstCategoryFinder implements BreadcrumbCategoryFinderInterface
 {
-    protected \MageSuite\Frontend\Model\ResourceModel\Category\FirstCategoryFinder $firstCategoryFinder;
-    protected \Magento\Store\Model\StoreManagerInterface $storeManager;
-    protected \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository;
+    protected array $categoryCache = [];
 
     public function __construct(
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \MageSuite\Frontend\Model\ResourceModel\Category\FirstCategoryFinder $firstCategoryFinder,
-        \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository
-    )
-    {
-        $this->storeManager = $storeManager;
-        $this->firstCategoryFinder = $firstCategoryFinder;
-        $this->categoryRepository = $categoryRepository;
-    }
+        protected \Magento\Store\Model\StoreManagerInterface $storeManager,
+        protected \MageSuite\Frontend\Model\ResourceModel\Category\FirstCategoryFinder $firstCategoryFinder,
+        protected \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository
+    ) {}
 
-    /**
-     * Finds first category in product in correct store
-     */
-    public function getCategory(\Magento\Catalog\Api\Data\ProductInterface $product)
+    public function getCategory(\Magento\Catalog\Api\Data\ProductInterface $product): ?\Magento\Catalog\Api\Data\CategoryInterface
     {
         $productCategories = $product->getAvailableInCategories();
 
-        if (empty($productCategories) or !is_array($productCategories)) {
+        if (empty($productCategories) || !is_array($productCategories)) {
             return null;
         }
 
-        return $this->getFirstCategoryForStore($productCategories, $product->getStoreId());
+        $cacheKey = (int)$product->getId() . '_' . (int)$product->getStoreId();
+
+        if (!array_key_exists($cacheKey, $this->categoryCache)) {
+            $this->categoryCache[$cacheKey] = $this->getFirstCategoryForStore($productCategories, (int)$product->getStoreId());
+        }
+
+        return $this->categoryCache[$cacheKey];
     }
 
-    private function getFirstCategoryForStore($categoryIds, $storeId)
+    protected function getFirstCategoryForStore(array $categoryIds, int $storeId): ?\Magento\Catalog\Api\Data\CategoryInterface
     {
         $rootCategoryId = $this->storeManager->getStore($storeId)->getRootCategoryId();
         $firstCategoryId = $this->firstCategoryFinder->getFirstCategoryIdForStore($categoryIds, $rootCategoryId);
