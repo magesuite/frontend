@@ -40,4 +40,10 @@
                 type="MageSuite\Frontend\Plugin\Magento\Widget\Block\BlockInterface\DecodeWidgetContent"
                 sortOrder="10"/>
     </type>
+
+    <type name="MageSuite\Frontend\Block\Product\View\Tile">
+        <arguments>
+            <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
 </config>
