@@ -142,10 +142,6 @@
         <plugin name="add_bundle_selections_to_simplified_bundle" type="MageSuite\Frontend\Plugin\Catalog\Block\Product\ListProduct\AddBundleSelectionsToSimplifiedBundle"/>
     </type>
 
-    <type name="Magento\Framework\App\ProductMetadataInterface">
-        <plugin name="cache_magento_version" type="MageSuite\Frontend\Plugin\Framework\App\ProductMetadataInterface\CacheVersion"/>
-    </type>
-
     <type name="Magento\Sitemap\Model\ItemProvider\Category">
         <plugin name="remove_category_with_custom_category_url" type="MageSuite\Frontend\Plugin\Sitemap\Model\ItemProvider\Category\RemoveCategoryWithCustomCategoryUrl" sortOrder="2"/>
     </type>
