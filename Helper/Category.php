@@ -1,102 +1,33 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageSuite\Frontend\Helper;
 
 class Category extends \Magento\Framework\App\Helper\AbstractHelper
 {
-    const CACHE_LIFETIME = 86400;
-    const CACHE_TAG = 'layered_navigation_tree_%s_%s_%s';
+    protected const CACHE_LIFETIME = 86400;
+    protected const CACHE_TAG = 'layered_navigation_tree_%s_%s_%s';
 
-    const CATEGORY_CUSTOM_URL = 'category_custom_url';
-    const CATEGORY_TOP_LEVEL = 2;
+    public const CATEGORY_CUSTOM_URL = 'category_custom_url';
+    protected const CATEGORY_TOP_LEVEL = 2;
 
-    const XML_PATH_SEO_CATEGORY_CUSTOM_URL_REDIRECTION_TYPE = 'seo/category/custom_url_redirection_type';
+    protected const XML_PATH_SEO_CATEGORY_CUSTOM_URL_REDIRECTION_TYPE = 'seo/category/custom_url_redirection_type';
 
-    /**
-     * @var \Magento\Framework\Registry
-     */
-    protected $registry;
-
-    /**
-     * @var \MageSuite\Frontend\Model\Category\Tree
-     */
-    protected $categoryTree;
-
-    /**
-     * @var \MageSuite\ContentConstructorFrontend\DataProviders\ProductCarouselDataProvider
-     */
-    protected $productDataProvider;
-
-    /**
-     * @var \Magento\Framework\Json\EncoderInterface
-     */
-    protected $jsonDecoder;
-
-    /**
-     * @var \Magento\Framework\App\CacheInterface
-     */
-    protected $cache;
-
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface $storeManager
-     */
-    protected $storeManager;
-
-    /**
-     * @var \Magento\Catalog\Model\ResourceModel\Category
-     */
-    protected $categoryResource;
-
-    /**
-     * @var \Magento\Catalog\Api\CategoryRepositoryInterface
-     */
-    protected $categoryRepository;
-
-    /**
-     * @var \Magento\Eav\Model\Config
-     */
-    protected $eavConfig;
-
-    /**
-     * @var \MageSuite\CategoryIcon\Helper\CategoryIcon
-     */
-    protected $categoryIconHelper;
-
-    /**
-     * @var \Magento\Catalog\Model\CategoryFactory
-     */
-    protected $categoryFactory;
-
-    protected $rootCategoryId;
+    protected int $rootCategoryId = 0;
 
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\Registry $registry,
-        \MageSuite\Frontend\Model\Category\Tree $categoryTree,
-        \MageSuite\ContentConstructorFrontend\DataProviders\ProductCarouselDataProvider $productDataProvider,
-        \Magento\Framework\Json\DecoderInterface $jsonDecoder,
-        \Magento\Framework\App\CacheInterface $cache,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\ResourceModel\Category $categoryResource,
-        \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository,
-        \Magento\Eav\Model\Config $eavConfig,
-        \MageSuite\CategoryIcon\Helper\CategoryIcon $categoryIconHelper,
-        ?\Magento\Catalog\Model\CategoryFactory $categoryFactory = null
+        protected \Magento\Framework\Registry $registry,
+        protected \MageSuite\Frontend\Model\Category\Tree $categoryTree,
+        protected \MageSuite\ContentConstructorFrontend\DataProviders\ProductCarouselDataProvider $productDataProvider,
+        protected \Magento\Framework\Json\DecoderInterface $jsonDecoder,
+        protected \Magento\Framework\App\CacheInterface $cache,
+        protected \Magento\Store\Model\StoreManagerInterface $storeManager,
+        protected \Magento\Catalog\Model\ResourceModel\Category $categoryResource,
+        protected \Magento\Framework\Serialize\SerializerInterface $serializer
     ) {
         parent::__construct($context);
-
-        $this->registry = $registry;
-        $this->categoryTree = $categoryTree;
-        $this->productDataProvider = $productDataProvider;
-        $this->jsonDecoder = $jsonDecoder;
-        $this->cache = $cache;
-        $this->storeManager = $storeManager;
-        $this->categoryResource = $categoryResource;
-        $this->categoryRepository = $categoryRepository;
-        $this->eavConfig = $eavConfig;
-        $this->categoryIconHelper = $categoryIconHelper;
-        $this->categoryFactory = $categoryFactory
-            ?? \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Catalog\Model\CategoryFactory::class);
     }
 
     public function getCustomUrlRedirectionType(): int
@@ -122,7 +53,11 @@ class Category extends \Magento\Framework\App\Helper\AbstractHelper
 
         $cacheTag = sprintf(self::CACHE_TAG, $category->getId(), (int)$returnCurrent, $this->storeManager->getStore()->getId());
 
-        $categoryNode = unserialize($this->cache->load($cacheTag));
+        try {
+            $categoryNode = $this->serializer->unserialize($this->cache->load($cacheTag));
+        } catch (\InvalidArgumentException $exception) {
+            $categoryNode = null;
+        }
 
         if (!$categoryNode) {
             $configuration = [
@@ -131,13 +66,18 @@ class Category extends \Magento\Framework\App\Helper\AbstractHelper
             ];
 
             $categoryTreeId = ($returnCurrent or $category->getLevel() == self::CATEGORY_TOP_LEVEL) ? $category->getId() : $category->getParentId();
-            $categoryNode = $this->categoryTree->getCategoryTree($configuration, $categoryTreeId);
+            $categoryNode = $this->categoryTree->getCategoryTree($configuration, (int)$categoryTreeId);
 
             if (!$categoryNode) {
                 return false;
             }
 
-            $this->cache->save(serialize($categoryNode), $cacheTag, [\Magento\Catalog\Model\Category::CACHE_TAG, 'layered_navigation_tree'], self::CACHE_LIFETIME);
+            $this->cache->save(
+                $this->serializer->serialize($categoryNode),
+                $cacheTag,
+                [\Magento\Catalog\Model\Category::CACHE_TAG, 'layered_navigation_tree'],
+                self::CACHE_LIFETIME
+            );
         }
 
         $categoryNode['current'] = true;
@@ -216,50 +156,10 @@ class Category extends \Magento\Framework\App\Helper\AbstractHelper
         return $url;
     }
 
-    public function getCategoryFilterIcon($filterItem)
-    {
-        if (!$filterItem instanceof \Smile\ElasticsuiteCatalog\Model\Layer\Filter\Item\Category) {
-            return null;
-        }
-
-        $categoryId = (int)$filterItem->getValueString();
-        $categoryIcon = $this->categoryResource
-            ->getAttributeRawValue(
-                $categoryId,
-                'category_icon',
-                $this->storeManager->getStore()->getId()
-            );
-
-        if (!$categoryIcon) {
-            return null;
-        }
-
-        $category = $this->categoryFactory->create();
-        $category->setCategoryIcon($categoryIcon);
-
-        return $this->categoryIconHelper->getUrl($category);
-    }
-
-    public function getCategoryView()
-    {
-        $category = $this->registry->registry('current_category');
-
-        if (!$category) {
-            return false;
-        }
-        $view = $category->getCustomAttribute('category_view');
-
-        if (!$view) {
-            return false;
-        }
-
-        return $view->getValue();
-    }
-
-    protected function getRootCategoryId()
+    protected function getRootCategoryId(): int
     {
         if (empty($this->rootCategoryId)) {
-            $this->rootCategoryId = $this->storeManager->getStore()->getRootCategoryId();
+            $this->rootCategoryId = (int)$this->storeManager->getStore()->getRootCategoryId();
         }
 
         return $this->rootCategoryId;
