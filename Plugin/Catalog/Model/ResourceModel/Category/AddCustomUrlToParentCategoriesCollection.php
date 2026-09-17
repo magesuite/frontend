@@ -7,37 +7,33 @@ namespace MageSuite\Frontend\Plugin\Catalog\Model\ResourceModel\Category;
 class AddCustomUrlToParentCategoriesCollection
 {
     public function __construct(
-        protected \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
+        protected \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
+        protected \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
     }
 
-    public function afterGetParentCategories(\Magento\Catalog\Model\ResourceModel\Category $subject, array $result): array
-    {
-        if (empty($result)) {
-            return $result;
-        }
+    public function aroundGetParentCategories(
+        \Magento\Catalog\Model\ResourceModel\Category $subject,
+        callable $proceed,
+        \Magento\Catalog\Model\Category $category
+    ): array {
+        $pathIds = array_reverse(explode(',', (string)$category->getPathInStore()));
+        $categories = $this->categoryCollectionFactory->create();
 
-        $categories = $this->fetchCategoriesWithCustomUrl((int)$subject->getStoreId(), array_keys($result));
-
-        foreach ($result as $item) {
-            $category = $categories->getItemById($item->getId());
-            $customUrl = $category?->getData(\MageSuite\Frontend\Helper\Category::CATEGORY_CUSTOM_URL);
-
-            $item->setData(\MageSuite\Frontend\Helper\Category::CATEGORY_CUSTOM_URL, $customUrl);
-        }
-
-        return $result;
-    }
-
-    protected function fetchCategoriesWithCustomUrl(
-        int $storeId,
-        array $categoryIds
-    ): \Magento\Catalog\Model\ResourceModel\Category\Collection {
-        $categories = $this->categoryCollectionFactory->create()
-            ->setStoreId($storeId)
-            ->addAttributeToSelect(\MageSuite\Frontend\Helper\Category::CATEGORY_CUSTOM_URL)
-            ->addFieldToFilter('entity_id', ['in' => $categoryIds]);
-
-        return $categories;
+        return $categories->setStore(
+            $this->storeManager->getStore()
+        )->addAttributeToSelect(
+            'name'
+        )->addAttributeToSelect(
+            'url_key'
+        )->addAttributeToSelect(
+            \MageSuite\Frontend\Helper\Category::CATEGORY_CUSTOM_URL
+        )->addFieldToFilter(
+            'entity_id',
+            ['in' => $pathIds]
+        )->addFieldToFilter(
+            'is_active',
+            1
+        )->load()->getItems();
     }
 }
