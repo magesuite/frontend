@@ -3,6 +3,8 @@
     <type name="Magento\Catalog\Model\ResourceModel\Category">
         <plugin name="add_custom_url_to_children_collection" type="MageSuite\Frontend\Plugin\Catalog\Model\ResourceModel\Category\AddCustomUrlToChildrenCollection"
                 sortOrder="10"/>
+        <plugin name="add_custom_url_to_parent_categories_collection" type="MageSuite\Frontend\Plugin\Catalog\Model\ResourceModel\Category\AddCustomUrlToParentCategoriesCollection"
+                sortOrder="10"/>
     </type>
 
     <type name="Magento\Catalog\Model\Category">
