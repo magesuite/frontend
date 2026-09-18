@@ -125,7 +125,7 @@ class Category extends \Magento\Framework\App\Helper\AbstractHelper
         }
 
         if (strpos($customUrl, 'http') !== false) {
-            return $customUrl;
+            return rtrim($customUrl, '/');
         }
 
         $baseUrl = $this->storeManager->getStore()->getBaseUrl();
